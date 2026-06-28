@@ -95,6 +95,128 @@ def test_max_items_applies_after_group_limits() -> None:
     assert result.group_counts == {"ai": 2}
 
 
+def test_min_items_preserves_category_coverage_before_global_score_order() -> None:
+    filtering = FilteringConfig(
+        max_items=4,
+        category_groups={
+            "ai": CategoryGroupConfig(limit=4, min_items=2, categories=["ai"]),
+            "finance": CategoryGroupConfig(limit=4, min_items=2, categories=["finance"]),
+        },
+    )
+    items = [
+        make_item("ai-10", 10.0, "ai"),
+        make_item("ai-9", 9.0, "ai"),
+        make_item("ai-8", 8.0, "ai"),
+        make_item("ai-7", 7.0, "ai"),
+        make_item("finance-6", 6.0, "finance"),
+        make_item("finance-5", 5.0, "finance"),
+    ]
+
+    result = make_orchestrator(filtering).apply_balanced_digest(items)
+
+    assert [item.id for item in result.items] == [
+        "ai-10",
+        "ai-9",
+        "finance-6",
+        "finance-5",
+    ]
+    assert result.group_counts == {"ai": 2, "finance": 2}
+
+
+def test_minimum_category_candidates_can_come_from_below_threshold_pool() -> None:
+    filtering = FilteringConfig(
+        category_groups={
+            "ai": CategoryGroupConfig(limit=4, min_items=2, categories=["ai"]),
+            "finance": CategoryGroupConfig(limit=4, min_items=2, categories=["finance"]),
+        },
+    )
+    orchestrator = make_orchestrator(filtering)
+    analyzed_items = [
+        make_item("ai-9", 9.0, "ai"),
+        make_item("ai-8", 8.0, "ai"),
+        make_item("finance-5", 5.0, "finance"),
+        make_item("finance-4", 4.0, "finance"),
+        make_item("finance-3", 3.0, "finance"),
+    ]
+    important_items = analyzed_items[:2]
+
+    result = orchestrator.include_minimum_category_candidates(
+        analyzed_items,
+        important_items,
+    )
+
+    assert [item.id for item in result] == [
+        "ai-9",
+        "ai-8",
+        "finance-5",
+        "finance-4",
+    ]
+
+
+def test_candidate_limit_reserves_source_category_groups() -> None:
+    filtering = FilteringConfig(
+        max_candidates=6,
+        category_groups={
+            "ai": CategoryGroupConfig(limit=8, min_items=1, categories=["AI 与科技动态"]),
+            "geo": CategoryGroupConfig(limit=8, min_items=1, categories=["地缘政治与国际关系"]),
+        },
+    )
+    orchestrator = make_orchestrator(filtering)
+    items = [
+        make_item("geo-1", 0, "地缘政治与国际关系"),
+        make_item("geo-2", 0, "地缘政治与国际关系"),
+        make_item("geo-3", 0, "地缘政治与国际关系"),
+        make_item("geo-4", 0, "地缘政治与国际关系"),
+        make_item("geo-5", 0, "地缘政治与国际关系"),
+        make_item("geo-6", 0, "地缘政治与国际关系"),
+        make_item("ai-1", 0, "AI 与科技动态"),
+        make_item("ai-2", 0, "AI 与科技动态"),
+    ]
+    for index, item in enumerate(items):
+        item.metadata["priority"] = 5 if item.title.startswith("geo") else 3
+        item.metadata["noise_level"] = "low"
+        item.published_at = datetime.fromtimestamp(1000 + index, timezone.utc)
+
+    result = orchestrator.apply_candidate_limit(items)
+
+    assert len(result) == 6
+    assert sum(item.metadata["category"] == "AI 与科技动态" for item in result) == 2
+
+
+def test_promote_core_hotspots_fills_core_minimum() -> None:
+    filtering = FilteringConfig(
+        category_groups={
+            "core": CategoryGroupConfig(
+                limit=10,
+                min_items=2,
+                categories=["今日核心热点"],
+            ),
+            "geo": CategoryGroupConfig(
+                limit=10,
+                min_items=2,
+                categories=["地缘政治与国际关系"],
+            ),
+        },
+    )
+    orchestrator = make_orchestrator(filtering)
+    items = [
+        make_item("core", 9.0, "今日核心热点"),
+        make_item("geo-top", 8.5, "地缘政治与国际关系"),
+        make_item("geo-low", 7.0, "地缘政治与国际关系"),
+    ]
+    items[1].metadata["importance_score"] = 9
+    items[1].metadata["hotness_score"] = 8
+
+    orchestrator.promote_core_hotspots(items)
+
+    assert [item.metadata["category"] for item in items] == [
+        "今日核心热点",
+        "今日核心热点",
+        "地缘政治与国际关系",
+    ]
+    assert items[1].metadata["original_category"] == "地缘政治与国际关系"
+
+
 def test_max_items_works_without_category_groups() -> None:
     filtering = FilteringConfig(max_items=1)
     items = [make_item("lower", 7.0, None), make_item("higher", 9.0, None)]
@@ -120,6 +242,47 @@ def test_duplicate_category_warns_and_first_group_wins() -> None:
     assert [item.id for item in result.items] == ["top"]
     assert result.duplicate_categories == ["shared"]
     assert "using 'first'" in orchestrator.console.export_text()
+
+
+def test_topic_dedup_preserves_related_items(monkeypatch) -> None:
+    class FakeClient:
+        async def complete(self, system, user):  # type: ignore[no-untyped-def]
+            return '{"duplicates": [[0, 1]]}'
+
+    filtering = FilteringConfig()
+    orchestrator = make_orchestrator(filtering)
+    orchestrator.config = SimpleNamespace(
+        filtering=filtering,
+        ai=AIConfig(
+            provider="openai",
+            model="test",
+            api_key_env="TEST_API_KEY",
+            languages=[],
+        ),
+    )
+    items = [
+        make_item("primary", 9.0, "地缘政治与国际关系"),
+        make_item("duplicate", 8.0, "地缘政治与国际关系"),
+        make_item("separate", 7.0, "财经市场"),
+    ]
+    items[1].ai_summary = "duplicate summary"
+    items[1].metadata["feed_name"] = "Duplicate Source"
+
+    monkeypatch.setattr("src.orchestrator.create_ai_client", lambda config: FakeClient())
+
+    result = asyncio.run(orchestrator.merge_topic_duplicates(items))
+
+    assert [item.id for item in result] == ["primary", "separate"]
+    assert result[0].metadata["related_items"] == [
+        {
+            "title": "duplicate",
+            "source": "Duplicate Source",
+            "url": "https://example.com/duplicate",
+            "category": "地缘政治与国际关系",
+            "summary": "duplicate summary",
+            "publish_time": items[1].published_at.isoformat(),
+        }
+    ]
 
 
 @pytest.mark.parametrize(

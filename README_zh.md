@@ -266,6 +266,44 @@ cp data/config.example.json data/config.json  # 自定义信息源
 }
 ```
 
+**个人信息雷达数据源字段**
+
+当前个人日报配置主要通过 `sources.rss` 扩展信息源。新增 RSS 源时建议使用：
+
+```jsonc
+{
+  "name": "来源名称",
+  "url": "https://example.com/feed.xml",
+  "enabled": true,
+  "category": "AI 与科技动态",
+  "language": "zh",
+  "region": "china",
+  "priority": 4,
+  "credibility": "high",
+  "noise_level": "low"
+}
+```
+
+字段说明：
+- `enabled`: 是否启用该来源。临时停用时改为 `false`。
+- `category`: 日报一级分类，建议使用“今日核心热点 / AI 与科技动态 / 地缘政治与国际关系 / 中国政策与社会治理 / 财经市场 / 商业与产业趋势 / 社会新闻与民生事件 / 文化生活与大众情绪”之一。
+- `language`: 内容语言，例如 `zh`、`en`。
+- `region`: 来源主要区域，例如 `china`、`global`、`asia`、`us`。
+- `priority`: 1-5，数字越高越优先。低优先级来源需要更高模型评分才会进入日报。
+- `credibility`: `high`、`medium` 或 `low`。
+- `noise_level`: `low`、`medium` 或 `high`。高噪声来源会被提高入选门槛。
+
+新增来源的优先级策略：
+- 优先使用官方 RSS。
+- 没有官方 RSS 时使用 RSSHub。
+- 仍没有稳定 RSS 时，使用 Google News RSS 或 Google Alerts 关键词方案。
+- 不建议为单个站点临时写爬虫，除非该来源长期稳定且确实重要。
+
+当前个人信息雷达额外加强了 AI 工具/玩法来源：
+- GitHub Release：OpenAI Agents SDK、OpenAI Cookbook、Playwright MCP、MCP Python SDK、Claude Code、MCP Servers、LangChain、LlamaIndex、Ollama、Continue。
+- OSS Insight：通过 `mcp`、`claude`、`skill`、`agents`、`cursor`、`coding agent`、`rag`、`llamaindex`、`langchain`、`ollama` 等关键词捕捉新工具仓库。
+- RSS / Google News fallback：Vercel AI SDK、Model Context Protocol、Claude Code、AI Agent Tooling、Product Hunt AI Tools、Hacker News AI Tools。
+
 **均衡日报（可选）**
 
 可以限制日报总条数，并避免单一类别占据过多内容。类别来自
@@ -294,6 +332,12 @@ cp data/config.example.json data/config.json  # 自定义信息源
 
 分组限额在 AI 分数过滤之后、内容补充之前执行。未配置
 `category_groups` 和 `max_items` 时，筛选行为保持不变。
+
+个人信息雷达还支持两层均衡：
+- `max_candidates` 会在 AI 分析前控制候选数量，并按来源分类预留候选，避免地缘或泛新闻源挤掉 AI 工具、财经、文化等类别。
+- `category_groups.*.min_items` 会在高分过滤后从已分析候选中回填低于阈值但同类最优的内容，保证分类简报覆盖面。
+
+语义去重会把同一真实事件聚成事件簇：主条目进入日报，被合并的重复报道会写入该条目的 `related_items`，在日报中显示为“相关进展”，避免同一事件占据多个主卡片。
 
 `data/config.json` 里的任意字符串值都可以通过 `${VAR_NAME}` 引用环境变量。这适合用于 `ai.base_url`、私有 RSS 链接、Webhook 地址或自定义请求头模板等字段。
 

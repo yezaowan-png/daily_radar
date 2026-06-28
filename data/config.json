@@ -1,0 +1,364 @@
+{
+  "version": "1.0",
+  "ai": {
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "api_key_env": "DEEPSEEK_API_KEY",
+    "temperature": 0.3,
+    "max_tokens": 8192,
+    "throttle_sec": 0,
+    "analysis_concurrency": 1,
+    "enrichment_concurrency": 1,
+    "languages": [
+      "zh"
+    ]
+  },
+  "email": {
+    "enabled": false,
+    "smtp_server": "smtp.qq.com",
+    "smtp_port": 465,
+    "imap_server": "imap.qq.com",
+    "imap_port": 993,
+    "email_address": "noreply@example.com",
+    "sender_name": "Horizon Daily",
+    "subscribe_keyword": "SUBSCRIBE",
+    "unsubscribe_keyword": "UNSUBSCRIBE"
+  },
+  "sources": {
+    "github": [
+      {
+        "type": "repo_releases",
+        "owner": "openai",
+        "repo": "openai-agents-python",
+        "enabled": true
+      },
+      {
+        "type": "repo_releases",
+        "owner": "openai",
+        "repo": "openai-cookbook",
+        "enabled": true
+      },
+      {
+        "type": "repo_releases",
+        "owner": "microsoft",
+        "repo": "playwright-mcp",
+        "enabled": true
+      },
+      {
+        "type": "repo_releases",
+        "owner": "modelcontextprotocol",
+        "repo": "python-sdk",
+        "enabled": true
+      },
+      {
+        "type": "repo_releases",
+        "owner": "anthropics",
+        "repo": "claude-code",
+        "enabled": true
+      },
+      {
+        "type": "repo_releases",
+        "owner": "modelcontextprotocol",
+        "repo": "servers",
+        "enabled": true
+      },
+      {
+        "type": "repo_releases",
+        "owner": "langchain-ai",
+        "repo": "langchain",
+        "enabled": true
+      },
+      {
+        "type": "repo_releases",
+        "owner": "run-llama",
+        "repo": "llama_index",
+        "enabled": true
+      },
+      {
+        "type": "repo_releases",
+        "owner": "ollama",
+        "repo": "ollama",
+        "enabled": true
+      },
+      {
+        "type": "repo_releases",
+        "owner": "continuedev",
+        "repo": "continue",
+        "enabled": true
+      }
+    ],
+    "hackernews": {
+      "enabled": true,
+      "fetch_top_stories": 30,
+      "min_score": 100
+    },
+    "rss": [
+      {"name": "arXiv cs.AI", "url": "https://arxiv.org/rss/cs.AI", "enabled": true, "category": "AI 与科技动态", "language": "en", "region": "global", "priority": 5, "credibility": "high", "noise_level": "low"},
+      {"name": "OpenAI News", "url": "https://openai.com/news/rss.xml", "enabled": true, "category": "AI 与科技动态", "language": "en", "region": "global", "priority": 5, "credibility": "high", "noise_level": "low"},
+      {"name": "Hugging Face Blog", "url": "https://huggingface.co/blog/feed.xml", "enabled": true, "category": "AI 与科技动态", "language": "en", "region": "global", "priority": 4, "credibility": "high", "noise_level": "low"},
+      {"name": "GitHub Trending RSS", "url": "https://mshibanami.github.io/GitHubTrendingRSS/daily/all.xml", "enabled": true, "category": "AI 与科技动态", "language": "en", "region": "global", "priority": 3, "credibility": "medium", "noise_level": "medium"},
+
+      {"name": "新华社", "url": "https://news.google.com/rss/search?q=site%3Axinhuanet.com&hl=zh-CN&gl=CN&ceid=CN%3Azh-Hans", "enabled": true, "category": "中国政策与社会治理", "language": "zh", "region": "china", "priority": 4, "credibility": "high", "noise_level": "medium"},
+      {"name": "财新", "url": "https://news.google.com/rss/search?q=site%3Acaixin.com&hl=zh-CN&gl=CN&ceid=CN%3Azh-Hans", "enabled": true, "category": "财经市场", "language": "zh", "region": "china", "priority": 4, "credibility": "high", "noise_level": "medium"},
+      {"name": "澎湃新闻", "url": "https://news.google.com/rss/search?q=site%3Athepaper.cn&hl=zh-CN&gl=CN&ceid=CN%3Azh-Hans", "enabled": true, "category": "社会新闻与民生事件", "language": "zh", "region": "china", "priority": 3, "credibility": "medium", "noise_level": "medium"},
+      {"name": "第一财经", "url": "https://news.google.com/rss/search?q=site%3Ayicai.com&hl=zh-CN&gl=CN&ceid=CN%3Azh-Hans", "enabled": true, "category": "财经市场", "language": "zh", "region": "china", "priority": 4, "credibility": "high", "noise_level": "medium"},
+      {"name": "36氪快讯", "url": "https://news.google.com/rss/search?q=site%3A36kr.com&hl=zh-CN&gl=CN&ceid=CN%3Azh-Hans", "enabled": true, "category": "商业与产业趋势", "language": "zh", "region": "china", "priority": 3, "credibility": "medium", "noise_level": "high"},
+      {"name": "界面新闻", "url": "https://news.google.com/rss/search?q=site%3Ajiemian.com&hl=zh-CN&gl=CN&ceid=CN%3Azh-Hans", "enabled": true, "category": "商业与产业趋势", "language": "zh", "region": "china", "priority": 3, "credibility": "medium", "noise_level": "medium"},
+      {"name": "IT之家", "url": "https://news.google.com/rss/search?q=site%3Aithome.com&hl=zh-CN&gl=CN&ceid=CN%3Azh-Hans", "enabled": true, "category": "AI 与科技动态", "language": "zh", "region": "china", "priority": 3, "credibility": "medium", "noise_level": "high"},
+      {"name": "虎嗅", "url": "https://news.google.com/rss/search?q=site%3Ahuxiu.com&hl=zh-CN&gl=CN&ceid=CN%3Azh-Hans", "enabled": true, "category": "商业与产业趋势", "language": "zh", "region": "china", "priority": 3, "credibility": "medium", "noise_level": "medium"},
+      {"name": "少数派", "url": "https://news.google.com/rss/search?q=site%3Asspai.com&hl=zh-CN&gl=CN&ceid=CN%3Azh-Hans", "enabled": true, "category": "文化生活与大众情绪", "language": "zh", "region": "china", "priority": 3, "credibility": "medium", "noise_level": "medium"},
+
+      {"name": "知乎热榜", "url": "https://news.google.com/rss/search?q=%E7%9F%A5%E4%B9%8E%E7%83%AD%E6%A6%9C&hl=zh-CN&gl=CN&ceid=CN%3Azh-Hans", "enabled": true, "category": "文化生活与大众情绪", "language": "zh", "region": "china", "priority": 2, "credibility": "medium", "noise_level": "high"},
+      {"name": "微博热搜", "url": "https://news.google.com/rss/search?q=%E5%BE%AE%E5%8D%9A%E7%83%AD%E6%90%9C&hl=zh-CN&gl=CN&ceid=CN%3Azh-Hans", "enabled": true, "category": "文化生活与大众情绪", "language": "zh", "region": "china", "priority": 2, "credibility": "medium", "noise_level": "high"},
+      {"name": "百度热搜", "url": "https://news.google.com/rss/search?q=%E7%99%BE%E5%BA%A6%E7%83%AD%E6%90%9C&hl=zh-CN&gl=CN&ceid=CN%3Azh-Hans", "enabled": true, "category": "文化生活与大众情绪", "language": "zh", "region": "china", "priority": 2, "credibility": "medium", "noise_level": "high"},
+      {"name": "B站热门", "url": "https://news.google.com/rss/search?q=B%E7%AB%99%E7%83%AD%E9%97%A8&hl=zh-CN&gl=CN&ceid=CN%3Azh-Hans", "enabled": true, "category": "文化生活与大众情绪", "language": "zh", "region": "china", "priority": 2, "credibility": "medium", "noise_level": "high"},
+      {"name": "雪球热帖", "url": "https://news.google.com/rss/search?q=%E9%9B%AA%E7%90%83%E7%83%AD%E5%B8%96&hl=zh-CN&gl=CN&ceid=CN%3Azh-Hans", "enabled": true, "category": "财经市场", "language": "zh", "region": "china", "priority": 2, "credibility": "medium", "noise_level": "high"},
+
+      {"name": "中国政府网", "url": "https://news.google.com/rss/search?q=site%3Agov.cn&hl=zh-CN&gl=CN&ceid=CN%3Azh-Hans", "enabled": true, "category": "中国政策与社会治理", "language": "zh", "region": "china", "priority": 5, "credibility": "high", "noise_level": "low"},
+      {"name": "发改委", "url": "https://news.google.com/rss/search?q=site%3Andrc.gov.cn&hl=zh-CN&gl=CN&ceid=CN%3Azh-Hans", "enabled": true, "category": "中国政策与社会治理", "language": "zh", "region": "china", "priority": 5, "credibility": "high", "noise_level": "low"},
+      {"name": "工信部", "url": "https://news.google.com/rss/search?q=site%3Amiit.gov.cn&hl=zh-CN&gl=CN&ceid=CN%3Azh-Hans", "enabled": true, "category": "中国政策与社会治理", "language": "zh", "region": "china", "priority": 5, "credibility": "high", "noise_level": "low"},
+      {"name": "财政部", "url": "https://news.google.com/rss/search?q=site%3Amof.gov.cn&hl=zh-CN&gl=CN&ceid=CN%3Azh-Hans", "enabled": true, "category": "财经市场", "language": "zh", "region": "china", "priority": 5, "credibility": "high", "noise_level": "low"},
+      {"name": "央行", "url": "https://news.google.com/rss/search?q=site%3Apbc.gov.cn&hl=zh-CN&gl=CN&ceid=CN%3Azh-Hans", "enabled": true, "category": "财经市场", "language": "zh", "region": "china", "priority": 5, "credibility": "high", "noise_level": "low"},
+      {"name": "证监会", "url": "https://news.google.com/rss/search?q=site%3Acsrc.gov.cn&hl=zh-CN&gl=CN&ceid=CN%3Azh-Hans", "enabled": true, "category": "财经市场", "language": "zh", "region": "china", "priority": 5, "credibility": "high", "noise_level": "low"},
+      {"name": "国家统计局", "url": "https://news.google.com/rss/search?q=site%3Astats.gov.cn&hl=zh-CN&gl=CN&ceid=CN%3Azh-Hans", "enabled": true, "category": "财经市场", "language": "zh", "region": "china", "priority": 5, "credibility": "high", "noise_level": "low"},
+      {"name": "网信办", "url": "https://news.google.com/rss/search?q=site%3Acac.gov.cn&hl=zh-CN&gl=CN&ceid=CN%3Azh-Hans", "enabled": true, "category": "中国政策与社会治理", "language": "zh", "region": "china", "priority": 5, "credibility": "high", "noise_level": "low"},
+
+      {"name": "BBC World", "url": "https://feeds.bbci.co.uk/news/world/rss.xml", "enabled": true, "category": "地缘政治与国际关系", "language": "en", "region": "global", "priority": 4, "credibility": "high", "noise_level": "medium"},
+      {"name": "BBC Business", "url": "https://feeds.bbci.co.uk/news/business/rss.xml", "enabled": true, "category": "财经市场", "language": "en", "region": "global", "priority": 4, "credibility": "high", "noise_level": "medium"},
+      {"name": "BBC Technology", "url": "https://feeds.bbci.co.uk/news/technology/rss.xml", "enabled": true, "category": "AI 与科技动态", "language": "en", "region": "global", "priority": 4, "credibility": "high", "noise_level": "medium"},
+      {"name": "The Guardian World", "url": "https://www.theguardian.com/world/rss", "enabled": true, "category": "地缘政治与国际关系", "language": "en", "region": "global", "priority": 4, "credibility": "high", "noise_level": "medium"},
+      {"name": "The Guardian Business", "url": "https://www.theguardian.com/business/rss", "enabled": true, "category": "商业与产业趋势", "language": "en", "region": "global", "priority": 4, "credibility": "high", "noise_level": "medium"},
+      {"name": "The Guardian Society", "url": "https://www.theguardian.com/society/rss", "enabled": true, "category": "社会新闻与民生事件", "language": "en", "region": "global", "priority": 3, "credibility": "high", "noise_level": "medium"},
+      {"name": "The Guardian Culture", "url": "https://www.theguardian.com/culture/rss", "enabled": true, "category": "文化生活与大众情绪", "language": "en", "region": "global", "priority": 3, "credibility": "high", "noise_level": "medium"},
+      {"name": "China Daily China", "url": "http://www.chinadaily.com.cn/rss/china_rss.xml", "enabled": true, "category": "中国政策与社会治理", "language": "en", "region": "china", "priority": 3, "credibility": "medium", "noise_level": "medium"},
+      {"name": "China Daily BizChina", "url": "http://www.chinadaily.com.cn/rss/bizchina_rss.xml", "enabled": true, "category": "财经市场", "language": "en", "region": "china", "priority": 3, "credibility": "medium", "noise_level": "medium"},
+      {"name": "China Daily World", "url": "http://www.chinadaily.com.cn/rss/world_rss.xml", "enabled": true, "category": "地缘政治与国际关系", "language": "en", "region": "china", "priority": 3, "credibility": "medium", "noise_level": "medium"},
+
+      {"name": "Al Jazeera", "url": "https://www.aljazeera.com/xml/rss/all.xml", "enabled": true, "category": "地缘政治与国际关系", "language": "en", "region": "global", "priority": 4, "credibility": "high", "noise_level": "medium"},
+      {"name": "DW", "url": "https://rss.dw.com/rdf/rss-en-all", "enabled": true, "category": "地缘政治与国际关系", "language": "en", "region": "global", "priority": 4, "credibility": "high", "noise_level": "medium"},
+      {"name": "France 24", "url": "https://www.france24.com/en/rss", "enabled": true, "category": "地缘政治与国际关系", "language": "en", "region": "global", "priority": 4, "credibility": "high", "noise_level": "medium"},
+      {"name": "Le Monde World", "url": "https://news.google.com/rss/search?q=site%3Alemonde.fr%2Fen%2Finternational&hl=en-US&gl=US&ceid=US%3Aen", "enabled": true, "category": "地缘政治与国际关系", "language": "en", "region": "global", "priority": 3, "credibility": "high", "noise_level": "medium"},
+      {"name": "Nikkei Asia", "url": "https://news.google.com/rss/search?q=site%3Aasia.nikkei.com&hl=en-US&gl=US&ceid=US%3Aen", "enabled": true, "category": "地缘政治与国际关系", "language": "en", "region": "asia", "priority": 4, "credibility": "high", "noise_level": "medium"},
+      {"name": "The Diplomat", "url": "https://thediplomat.com/feed/", "enabled": true, "category": "地缘政治与国际关系", "language": "en", "region": "asia-pacific", "priority": 4, "credibility": "high", "noise_level": "low"},
+      {"name": "Foreign Policy", "url": "https://news.google.com/rss/search?q=site%3Aforeignpolicy.com&hl=en-US&gl=US&ceid=US%3Aen", "enabled": true, "category": "地缘政治与国际关系", "language": "en", "region": "global", "priority": 4, "credibility": "high", "noise_level": "medium"},
+      {"name": "Politico Defense", "url": "https://news.google.com/rss/search?q=site%3Apolitico.com%20defense&hl=en-US&gl=US&ceid=US%3Aen", "enabled": true, "category": "地缘政治与国际关系", "language": "en", "region": "us", "priority": 4, "credibility": "high", "noise_level": "medium"},
+      {"name": "Institute for the Study of War", "url": "https://news.google.com/rss/search?q=site%3Aunderstandingwar.org&hl=en-US&gl=US&ceid=US%3Aen", "enabled": true, "category": "地缘政治与国际关系", "language": "en", "region": "global", "priority": 5, "credibility": "high", "noise_level": "low"},
+
+      {"name": "Google DeepMind Blog", "url": "https://news.google.com/rss/search?q=site%3Adeepmind.google%2Fdiscover%2Fblog&hl=en-US&gl=US&ceid=US%3Aen", "enabled": true, "category": "AI 与科技动态", "language": "en", "region": "global", "priority": 5, "credibility": "high", "noise_level": "low"},
+      {"name": "Google AI Blog", "url": "https://blog.google/technology/ai/rss/", "enabled": true, "category": "AI 与科技动态", "language": "en", "region": "global", "priority": 5, "credibility": "high", "noise_level": "low"},
+      {"name": "Anthropic Blog", "url": "https://news.google.com/rss/search?q=site%3Aanthropic.com%2Fnews&hl=en-US&gl=US&ceid=US%3Aen", "enabled": true, "category": "AI 与科技动态", "language": "en", "region": "global", "priority": 5, "credibility": "high", "noise_level": "low"},
+      {"name": "Meta AI Blog", "url": "https://news.google.com/rss/search?q=site%3Aai.meta.com%2Fblog&hl=en-US&gl=US&ceid=US%3Aen", "enabled": true, "category": "AI 与科技动态", "language": "en", "region": "global", "priority": 5, "credibility": "high", "noise_level": "low"},
+      {"name": "Microsoft AI Blog", "url": "https://news.google.com/rss/search?q=site%3Amicrosoft.com%20AI&hl=en-US&gl=US&ceid=US%3Aen", "enabled": true, "category": "AI 与科技动态", "language": "en", "region": "global", "priority": 5, "credibility": "high", "noise_level": "low"},
+      {"name": "Mistral AI Blog", "url": "https://news.google.com/rss/search?q=site%3Amistral.ai%2Fnews&hl=en-US&gl=US&ceid=US%3Aen", "enabled": true, "category": "AI 与科技动态", "language": "en", "region": "global", "priority": 5, "credibility": "high", "noise_level": "low"},
+      {"name": "Perplexity Blog", "url": "https://news.google.com/rss/search?q=site%3Aperplexity.ai%2Fhub%2Fblog&hl=en-US&gl=US&ceid=US%3Aen", "enabled": true, "category": "AI 与科技动态", "language": "en", "region": "global", "priority": 4, "credibility": "high", "noise_level": "low"},
+      {"name": "Cursor Blog", "url": "https://news.google.com/rss/search?q=site%3Acursor.com%2Fblog&hl=en-US&gl=US&ceid=US%3Aen", "enabled": true, "category": "AI 与科技动态", "language": "en", "region": "global", "priority": 4, "credibility": "high", "noise_level": "low"},
+      {"name": "Windsurf Blog", "url": "https://news.google.com/rss/search?q=site%3Awindsurf.com%2Fblog&hl=en-US&gl=US&ceid=US%3Aen", "enabled": true, "category": "AI 与科技动态", "language": "en", "region": "global", "priority": 4, "credibility": "high", "noise_level": "low"},
+      {"name": "LangChain Blog", "url": "https://blog.langchain.com/rss/", "enabled": true, "category": "AI 与科技动态", "language": "en", "region": "global", "priority": 4, "credibility": "high", "noise_level": "low"},
+      {"name": "LlamaIndex Blog", "url": "https://news.google.com/rss/search?q=site%3Allamaindex.ai%2Fblog&hl=en-US&gl=US&ceid=US%3Aen", "enabled": true, "category": "AI 与科技动态", "language": "en", "region": "global", "priority": 4, "credibility": "high", "noise_level": "low"},
+      {"name": "Ollama Blog", "url": "https://ollama.com/blog/rss.xml", "enabled": true, "category": "AI 与科技动态", "language": "en", "region": "global", "priority": 4, "credibility": "high", "noise_level": "low"},
+      {"name": "NVIDIA Blog", "url": "https://blogs.nvidia.com/feed/", "enabled": true, "category": "AI 与科技动态", "language": "en", "region": "global", "priority": 4, "credibility": "high", "noise_level": "medium"},
+      {"name": "Vercel AI SDK", "url": "https://news.google.com/rss/search?q=site%3Avercel.com%2Fblog%20%22AI%20SDK%22&hl=en-US&gl=US&ceid=US%3Aen", "enabled": true, "category": "AI 与科技动态", "language": "en", "region": "global", "priority": 4, "credibility": "high", "noise_level": "low"},
+      {"name": "Model Context Protocol News", "url": "https://news.google.com/rss/search?q=%22Model%20Context%20Protocol%22%20OR%20MCP%20AI%20tools&hl=en-US&gl=US&ceid=US%3Aen", "enabled": true, "category": "AI 与科技动态", "language": "en", "region": "global", "priority": 4, "credibility": "medium", "noise_level": "medium"},
+      {"name": "Claude Code News", "url": "https://news.google.com/rss/search?q=%22Claude%20Code%22%20OR%20site%3Adocs.anthropic.com%20%22Claude%20Code%22&hl=en-US&gl=US&ceid=US%3Aen", "enabled": true, "category": "AI 与科技动态", "language": "en", "region": "global", "priority": 4, "credibility": "medium", "noise_level": "medium"},
+      {"name": "AI Agent Tooling", "url": "https://news.google.com/rss/search?q=%22AI%20agent%22%20%28tool%20OR%20workflow%20OR%20framework%20OR%20coding%29&hl=en-US&gl=US&ceid=US%3Aen", "enabled": true, "category": "AI 与科技动态", "language": "en", "region": "global", "priority": 3, "credibility": "medium", "noise_level": "medium"},
+      {"name": "Product Hunt AI Tools", "url": "https://news.google.com/rss/search?q=site%3Aproducthunt.com%2Fposts%20%28AI%20OR%20agent%20OR%20LLM%29&hl=en-US&gl=US&ceid=US%3Aen", "enabled": true, "category": "AI 与科技动态", "language": "en", "region": "global", "priority": 3, "credibility": "medium", "noise_level": "high"},
+      {"name": "Hacker News AI Tools", "url": "https://news.google.com/rss/search?q=site%3Anews.ycombinator.com%20%28AI%20OR%20LLM%20OR%20agent%20OR%20MCP%29&hl=en-US&gl=US&ceid=US%3Aen", "enabled": true, "category": "AI 与科技动态", "language": "en", "region": "global", "priority": 3, "credibility": "medium", "noise_level": "high"}
+    ],
+    "reddit": {
+      "enabled": true,
+      "subreddits": [
+        {
+          "subreddit": "MachineLearning",
+          "enabled": true,
+          "sort": "hot",
+          "time_filter": "day",
+          "fetch_limit": 20,
+          "min_score": 50
+        },
+        {
+          "subreddit": "LocalLLaMA",
+          "enabled": true,
+          "sort": "hot",
+          "time_filter": "day",
+          "fetch_limit": 20,
+          "min_score": 30
+        }
+      ],
+      "users": [],
+      "fetch_comments": 5
+    },
+    "telegram": {
+      "enabled": false,
+      "channels": []
+    },
+    "twitter": {
+      "enabled": false,
+      "users": [],
+      "fetch_limit": 10,
+      "fetch_reply_text": false,
+      "max_replies_per_tweet": 3,
+      "max_tweets_to_expand": 10,
+      "reply_min_likes": 0,
+      "apify_token_env": "APIFY_TOKEN",
+      "actor_id": "altimis~scweet",
+      "cookie_dir": "data",
+      "cookie_file_pattern": "x_cookies_*.json"
+    },
+    "openbb": {
+      "enabled": false,
+      "watchlists": [],
+      "fetch_filings": false,
+      "filings_provider": "sec"
+    },
+    "ossinsight": {
+      "enabled": true,
+      "period": "past_24_hours",
+      "languages": [
+        "All",
+        "Python",
+        "TypeScript"
+      ],
+      "keywords": [
+        "mcp",
+        "claude",
+        "skill",
+        "agents",
+        "playwright",
+        "cursor",
+        "codegen",
+        "vibe coding",
+        "ai coding",
+        "coding agent",
+        "agentic",
+        "rag",
+        "llamaindex",
+        "langchain",
+        "ollama",
+        "openai",
+        "anthropic",
+        "llm",
+        "ai"
+      ],
+      "min_stars": 20,
+      "max_items": 20
+    }
+  },
+  "filtering": {
+    "ai_score_threshold": 6.2,
+    "time_window_hours": 24,
+    "max_candidates": 80,
+    "max_items": 30,
+    "category_groups": {
+      "core": {
+        "name": "今日核心热点",
+        "limit": 10,
+        "min_items": 2,
+        "categories": [
+          "今日核心热点"
+        ]
+      },
+      "technology": {
+        "name": "AI 与科技动态",
+        "limit": 12,
+        "min_items": 4,
+        "categories": [
+          "AI 与科技动态"
+        ]
+      },
+      "geopolitics": {
+        "name": "地缘政治与国际关系",
+        "limit": 10,
+        "min_items": 2,
+        "categories": [
+          "地缘政治与国际关系"
+        ]
+      },
+      "china_policy": {
+        "name": "中国政策与社会治理",
+        "limit": 8,
+        "min_items": 2,
+        "categories": [
+          "中国政策与社会治理"
+        ]
+      },
+      "markets": {
+        "name": "财经市场",
+        "limit": 8,
+        "min_items": 2,
+        "categories": [
+          "财经市场"
+        ]
+      },
+      "business": {
+        "name": "商业与产业趋势",
+        "limit": 8,
+        "min_items": 2,
+        "categories": [
+          "商业与产业趋势"
+        ]
+      },
+      "society": {
+        "name": "社会新闻与民生事件",
+        "limit": 8,
+        "min_items": 2,
+        "categories": [
+          "社会新闻与民生事件"
+        ]
+      },
+      "culture": {
+        "name": "文化生活与大众情绪",
+        "limit": 8,
+        "min_items": 2,
+        "categories": [
+          "文化生活与大众情绪"
+        ]
+      }
+    },
+    "default_group": "other",
+    "default_group_limit": 30
+  },
+  "webhook": {
+    "enabled": false,
+    "url_env": "HORIZON_WEBHOOK_URL",
+    "delivery": "summary",
+    "overview_position": "first",
+    "platform": "generic",
+    "layout": "markdown",
+    "fallback_layout": "markdown",
+    "languages": [
+      "zh"
+    ],
+    "request_body": {
+      "msg_type": "interactive",
+      "card": {
+        "schema": "2.0",
+        "config": {
+          "wide_screen_mode": true
+        },
+        "header": {
+          "title": {
+            "tag": "plain_text",
+            "content": "#{message_title}"
+          },
+          "template": "blue"
+        },
+        "body": {
+          "elements": [
+            {
+              "tag": "markdown",
+              "content": "Horizon生成结果: #{result}\nHorizon日报重要资讯数量: #{important_items}/#{all_items}"
+            },
+            {
+              "tag": "hr"
+            },
+            {
+              "tag": "markdown",
+              "content": "#{summary}"
+            }
+          ]
+        }
+      }
+    },
+    "headers": ""
+  }
+}

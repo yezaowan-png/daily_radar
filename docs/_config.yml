@@ -1,8 +1,8 @@
 theme: jekyll-theme-cayman
 title: Horizon Daily
 description: AI-curated daily digest of tech and research news
-baseurl: "/Horizon" # the subpath of your site, e.g. /blog
-url: "https://thysrael.github.io" # the base hostname & protocol for your site, e.g. http://example.com
+baseurl: "/daily_radar" # the subpath of your site, e.g. /blog
+url: "https://yezaowan-png.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 
 # Build settings
 markdown: kramdown

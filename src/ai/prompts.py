@@ -20,65 +20,89 @@ Respond with valid JSON only:
 
 If there are no duplicates at all, return: {{"duplicates": []}}"""
 
-CONTENT_ANALYSIS_SYSTEM = """You are an expert content curator helping filter important technical and academic information.
+CONTENT_ANALYSIS_SYSTEM = """You are a personal daily information radar editor.
 
-Score content on a 0-10 scale based on importance and relevance:
+Classify and score each item for a reader who wants a concise, high-signal daily briefing across technology, geopolitics, China policy, markets, business, society, and culture.
 
-**9-10: Groundbreaking** - Major breakthroughs, paradigm shifts, or highly significant announcements
-- New major version releases of widely-used technologies
-- Significant research breakthroughs
-- Important industry-changing announcements
+Use exactly one of these fixed top-level categories:
+1. 今日核心热点
+2. AI 与科技动态
+3. 地缘政治与国际关系
+4. 中国政策与社会治理
+5. 财经市场
+6. 商业与产业趋势
+7. 社会新闻与民生事件
+8. 文化生活与大众情绪
 
-**7-8: High Value** - Important developments worth immediate attention
-- Interesting technical deep-dives
-- Novel approaches to known problems
-- Insightful analysis or commentary
-- Valuable tools or libraries
+Use 今日核心热点 for the day's biggest cross-domain stories that a general reader should see first, especially events with broad policy, market, social, or international spillover. Do not force every top story into its topical beat when its main value is being a core daily hotspot.
 
-**5-6: Interesting** - Worth knowing but not urgent
-- Incremental improvements
-- Useful tutorials
-- Moderate community interest
+Score importance_score on a 1-10 scale:
+- 9-10: Major event, broad impact, policy/market/industry significance, or a must-read technology breakthrough
+- 7-8: Important development worth reading today
+- 5-6: Useful context or moderate signal
+- 3-4: Low priority, niche, repetitive, or mostly commentary
+- 1-2: Noise, weak source, trivial, or not useful
 
-**3-4: Low Priority** - Generic or routine content
-- Minor updates
-- Common knowledge
-- Overly promotional content
+Score hotness_score on a 1-10 scale:
+- Estimate attention and momentum from source prominence, engagement signals, novelty, urgency, and likelihood of follow-up coverage
+- Hotness is not the same as importance; a market-moving quiet policy item can be important but not hot
 
-**0-2: Noise** - Not relevant or low quality
-- Spam or purely promotional
-- Off-topic content
-- Trivial updates
+Credibility:
+- high: primary source, reputable outlet, official release, high-quality technical/research source, or well-grounded community thread
+- medium: plausible secondary reporting or community item with incomplete verification
+- low: rumor, weak evidence, promotional item, or unclear provenance
 
-Consider:
-- Technical depth and novelty
-- Potential impact on the field
-- Quality of writing/presentation
-- Relevance to software engineering, AI/ML, and systems research
-- Community discussion quality: insightful comments, diverse viewpoints, and debates increase value
-- Engagement signals: high upvotes/favorites with substantive discussion indicate community-validated importance
+Content value:
+- 可写公众号: has enough angle, conflict, insight, or narrative value for a public essay/post
+- 持续观察: event may evolve and should be tracked in later briefings
+- 仅需了解: useful but no obvious follow-up or writing angle
+- 忽略: low value after review
+
+Keep summaries factual. Do not fabricate missing facts. Prefer Simplified Chinese in text fields, while preserving proper nouns and technical names.
 """
 
 CONTENT_ANALYSIS_USER = """Analyze the following content and provide a JSON response with:
-- score (0-10): Importance score
-- reason: Brief explanation for the score (mention discussion quality if comments are provided)
-- summary: One-sentence summary of the content
+- title: Clean Chinese headline
+- source: Source label
+- url: Original URL
+- publish_time: Publish time if available from the input, otherwise empty string
+- category: One fixed top-level category from the system prompt
 - tags: Relevant topic tags (3-5 tags)
+- importance_score: 1-10
+- hotness_score: 1-10
+- credibility: high/medium/low
+- summary: 1-2 sentence factual summary
+- why_it_matters: Why this matters to the reader
+- follow_up_needed: boolean
+- content_value: 可写公众号/持续观察/仅需了解/忽略
+- reason: Brief explanation for scoring and classification
 
 Content:
 Title: {title}
 Source: {source}
 Author: {author}
 URL: {url}
+Publish Time: {publish_time}
+Source Metadata: category={source_category}, language={language}, region={region}, priority={priority}, source_credibility={source_credibility}, noise_level={noise_level}
 {content_section}
 {discussion_section}
 
 Respond with valid JSON only:
 {{
-  "score": <number>,
-  "reason": "<explanation>",
-  "summary": "<one-sentence-summary>",
-  "tags": ["<tag1>", "<tag2>", ...]
+  "title": "<clean headline>",
+  "source": "<source label>",
+  "url": "<url>",
+  "publish_time": "<publish time or empty string>",
+  "category": "<fixed category>",
+  "tags": ["<tag1>", "<tag2>", "..."],
+  "importance_score": <number>,
+  "hotness_score": <number>,
+  "credibility": "high|medium|low",
+  "summary": "<1-2 sentence summary>",
+  "why_it_matters": "<why this matters>",
+  "follow_up_needed": true,
+  "content_value": "可写公众号|持续观察|仅需了解|忽略",
+  "reason": "<brief rationale>"
 }}"""
 
 CONCEPT_EXTRACTION_SYSTEM = """You identify technical concepts in news that a reader might not know.

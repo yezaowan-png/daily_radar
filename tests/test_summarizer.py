@@ -108,6 +108,15 @@ def test_generate_webhook_item_uses_localized_discussion_label():
 def test_generate_summary_zh_uses_localized_selection_header_and_numeric_date():
     summarizer = DailySummarizer()
     item = _make_item(1)
+    item.metadata.update({
+        "category": "AI 与科技动态",
+        "importance_score": 8.0,
+        "hotness_score": 7.0,
+        "credibility": "high",
+        "why_it_matters": "这是一条值得关注的测试新闻。",
+        "follow_up_needed": True,
+        "content_value": "持续观察",
+    })
 
     result = _run_async(
         summarizer.generate_summary(
@@ -118,10 +127,46 @@ def test_generate_summary_zh_uses_localized_selection_header_and_numeric_date():
         )
     )
 
-    assert "> 从 10 条内容中筛选出 1 条重要资讯。" in result
-    assert "rss · tester · 4月25日 08:00" in result
+    assert "# 个人每日信息雷达 - 2026-04-25" in result
+    assert "> 从 10 条内容中筛选出 1 条重点信息。" in result
+    assert "## 1. 今日必看（最多 30 条）" in result
+    assert "- category: AI 与科技动态" in result
+    assert "- content_value: 持续观察" in result
     assert "From 10 items" not in result
     assert "Apr 25, 08:00" not in result
+
+
+def test_generate_summary_zh_renders_related_event_cluster_items():
+    summarizer = DailySummarizer()
+    item = _make_item(1)
+    item.metadata.update({
+        "category": "今日核心热点",
+        "importance_score": 9.0,
+        "hotness_score": 8.0,
+        "credibility": "high",
+        "why_it_matters": "同一事件有多个角度。",
+        "content_value": "持续观察",
+        "related_items": [
+            {
+                "title": "Related angle",
+                "source": "Reuters",
+                "url": "https://example.com/related",
+                "summary": "A second source reports a related angle.",
+            }
+        ],
+    })
+
+    result = _run_async(
+        summarizer.generate_summary(
+            [item],
+            date="2026-04-25",
+            total_fetched=10,
+            language="zh",
+        )
+    )
+
+    assert "- related_items:" in result
+    assert "[Related angle](https://example.com/related) · Reuters" in result
 
 
 def test_generate_empty_summary_zh_uses_localized_analyzed_line():

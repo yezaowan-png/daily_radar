@@ -99,21 +99,34 @@ class HorizonOrchestrator:
                     f"→ {len(merged_items)} unique items\n"
                 )
 
+            candidates = self.apply_candidate_limit(merged_items)
+
             # 4. Analyze with AI
-            analyzed_items = await self._analyze_content(merged_items)
+            analyzed_items = await self._analyze_content(candidates)
             self.console.print(f"🤖 Analyzed {len(analyzed_items)} items with AI\n")
 
             # 5. Filter by score threshold
             threshold = self.config.filtering.ai_score_threshold
             important_items = [
                 item for item in analyzed_items
-                if item.ai_score and item.ai_score >= threshold
+                if item.ai_score and item.ai_score >= self._effective_score_threshold(item, threshold)
             ]
             important_items.sort(key=lambda x: x.ai_score or 0, reverse=True)
 
             self.console.print(
                 f"⭐️ {len(important_items)} items scored ≥ {threshold}\n"
             )
+
+            balanced_pool = self.include_minimum_category_candidates(
+                analyzed_items,
+                important_items,
+            )
+            if len(balanced_pool) > len(important_items):
+                self.console.print(
+                    f"🧺 Added {len(balanced_pool) - len(important_items)} below-threshold "
+                    "items to satisfy category minimums\n"
+                )
+            important_items = balanced_pool
 
             # 5.5 Semantic deduplication: drop items covering the same topic
             deduped_items = await self.merge_topic_duplicates(important_items)
@@ -122,6 +135,7 @@ class HorizonOrchestrator:
                     f"🧹 Removed {len(important_items) - len(deduped_items)} topic duplicates "
                     f"→ {len(deduped_items)} unique items\n"
                 )
+            self.promote_core_hotspots(deduped_items)
             important_items = deduped_items
 
             # 5.6 Optional second-stage Twitter reply expansion + targeted re-analysis
@@ -472,6 +486,9 @@ class HorizonOrchestrator:
                 if dup_idx == primary_idx:
                     continue
                 dup = items[dup_idx]
+                related_items = primary.metadata.setdefault("related_items", [])
+                if isinstance(related_items, list):
+                    related_items.append(self._related_item_metadata(dup))
                 # Merge comments/content from the duplicate into the primary
                 if dup.content:
                     if not primary.content or dup.content not in primary.content:
@@ -484,6 +501,17 @@ class HorizonOrchestrator:
                 drop_indices.add(dup_idx)
 
         return [item for i, item in enumerate(items) if i not in drop_indices]
+
+    def _related_item_metadata(self, item: ContentItem) -> dict:
+        """Compact metadata for a duplicate item merged into an event cluster."""
+        return {
+            "title": item.metadata.get("radar_title") or item.title,
+            "source": self._sub_source_label(item),
+            "url": str(item.url),
+            "category": item.metadata.get("category"),
+            "summary": item.ai_summary or item.metadata.get("summary") or "",
+            "publish_time": item.published_at.isoformat() if item.published_at else "",
+        }
 
     def apply_balanced_digest(
         self,
@@ -529,8 +557,11 @@ class HorizonOrchestrator:
                 )
 
         selected: List[tuple[ContentItem, str]] = []
+        selected_ids: set[str] = set()
         group_counts: Dict[str, int] = defaultdict(int)
         default_group = filtering.default_group
+        item_groups: Dict[str, str] = {}
+        group_buckets: Dict[str, List[ContentItem]] = defaultdict(list)
 
         for item in sorted_items:
             category = item.metadata.get("category")
@@ -539,6 +570,24 @@ class HorizonOrchestrator:
                 if isinstance(category, str)
                 else default_group
             )
+            item_groups[item.id] = group_key
+            group_buckets[group_key].append(item)
+
+        for group_key, group in groups.items():
+            min_items = min(group.min_items, group.limit)
+            if min_items <= 0:
+                continue
+            for item in group_buckets.get(group_key, []):
+                if group_counts[group_key] >= min_items:
+                    break
+                selected.append((item, group_key))
+                selected_ids.add(item.id)
+                group_counts[group_key] += 1
+
+        for item in sorted_items:
+            if item.id in selected_ids:
+                continue
+            group_key = item_groups.get(item.id, default_group)
 
             if group_key in groups:
                 limit = groups[group_key].limit
@@ -549,6 +598,7 @@ class HorizonOrchestrator:
                 continue
 
             selected.append((item, group_key))
+            selected_ids.add(item.id)
             group_counts[group_key] += 1
 
         if max_items is not None:
@@ -594,6 +644,191 @@ class HorizonOrchestrator:
             group_limits=group_limits,
             duplicate_categories=sorted(set(duplicate_categories)),
         )
+
+    def include_minimum_category_candidates(
+        self,
+        analyzed_items: List[ContentItem],
+        important_items: List[ContentItem],
+    ) -> List[ContentItem]:
+        """Add the best below-threshold items needed for configured minimums."""
+        filtering = self.config.filtering
+        groups = filtering.category_groups
+        if not groups:
+            return important_items
+
+        category_to_group: Dict[str, str] = {}
+        for group_key, group in groups.items():
+            for category in group.categories:
+                category_to_group.setdefault(category, group_key)
+
+        def _group_for(item: ContentItem) -> str:
+            category = item.metadata.get("category")
+            if isinstance(category, str):
+                return category_to_group.get(category, filtering.default_group)
+            return filtering.default_group
+
+        selected_ids = {item.id for item in important_items}
+        selected = list(important_items)
+        group_counts: Dict[str, int] = defaultdict(int)
+        buckets: Dict[str, List[ContentItem]] = defaultdict(list)
+
+        for item in important_items:
+            group_counts[_group_for(item)] += 1
+
+        for item in sorted(
+            analyzed_items,
+            key=lambda content_item: content_item.ai_score or 0,
+            reverse=True,
+        ):
+            if item.id in selected_ids:
+                continue
+            group_key = _group_for(item)
+            if group_key in groups:
+                buckets[group_key].append(item)
+
+        for group_key, group in groups.items():
+            min_items = min(group.min_items, group.limit)
+            if min_items <= 0:
+                continue
+            for item in buckets.get(group_key, []):
+                if group_counts[group_key] >= min_items:
+                    break
+                selected.append(item)
+                selected_ids.add(item.id)
+                group_counts[group_key] += 1
+
+        return sorted(
+            selected,
+            key=lambda content_item: content_item.ai_score or 0,
+            reverse=True,
+        )
+
+    def promote_core_hotspots(self, items: List[ContentItem]) -> None:
+        """Ensure the cross-domain core hotspot category has enough items."""
+        groups = self.config.filtering.category_groups
+        core_category = "今日核心热点"
+        core_min_items = 0
+        for group in groups.values():
+            if core_category in group.categories:
+                core_min_items = min(group.min_items, group.limit)
+                break
+        if core_min_items <= 0:
+            return
+
+        core_count = sum(item.metadata.get("category") == core_category for item in items)
+        if core_count >= core_min_items:
+            return
+
+        def _hotspot_key(item: ContentItem) -> tuple:
+            importance = item.metadata.get("importance_score") or item.ai_score or 0
+            hotness = item.metadata.get("hotness_score") or 0
+            return importance, hotness, item.ai_score or 0
+
+        promoted = 0
+        for item in sorted(items, key=_hotspot_key, reverse=True):
+            if core_count >= core_min_items:
+                break
+            if item.metadata.get("category") == core_category:
+                continue
+            item.metadata.setdefault("original_category", item.metadata.get("category"))
+            item.metadata["category"] = core_category
+            core_count += 1
+            promoted += 1
+
+        if promoted:
+            self.console.print(
+                f"🔥 Promoted {promoted} top items to 今日核心热点 minimum\n"
+            )
+
+    def apply_candidate_limit(self, items: List[ContentItem]) -> List[ContentItem]:
+        """Limit pre-analysis candidates to keep large source sets affordable."""
+        limit = self.config.filtering.max_candidates
+        if limit is None or len(items) <= limit:
+            return items
+
+        def _candidate_key(item: ContentItem) -> tuple:
+            try:
+                priority = int(item.metadata.get("priority") or 3)
+            except (TypeError, ValueError):
+                priority = 3
+            noise_rank = {"low": 2, "medium": 1, "high": 0}.get(
+                item.metadata.get("noise_level"),
+                1,
+            )
+            timestamp = item.published_at.timestamp() if item.published_at else 0
+            return priority, noise_rank, timestamp
+
+        sorted_items = sorted(items, key=_candidate_key, reverse=True)
+        groups = self.config.filtering.category_groups
+
+        if not groups:
+            selected = sorted_items[:limit]
+        else:
+            category_to_group: Dict[str, str] = {}
+            for group_key, group in groups.items():
+                for category in group.categories:
+                    category_to_group.setdefault(category, group_key)
+
+            def _source_group(item: ContentItem) -> Optional[str]:
+                category = item.metadata.get("category")
+                if isinstance(category, str):
+                    return category_to_group.get(category)
+                return None
+
+            selected = []
+            selected_ids: set[str] = set()
+            for group_key, group in groups.items():
+                reserve_target = min(group.limit, max(group.min_items * 4, group.min_items))
+                if reserve_target <= 0:
+                    continue
+                group_count = 0
+                for item in sorted_items:
+                    if item.id in selected_ids or _source_group(item) != group_key:
+                        continue
+                    selected.append(item)
+                    selected_ids.add(item.id)
+                    group_count += 1
+                    if group_count >= reserve_target or len(selected) >= limit:
+                        break
+                if len(selected) >= limit:
+                    break
+
+            for item in sorted_items:
+                if len(selected) >= limit:
+                    break
+                if item.id in selected_ids:
+                    continue
+                selected.append(item)
+                selected_ids.add(item.id)
+
+        self.console.print(
+            f"🎯 Candidate prefilter selected {len(selected)}/{len(items)} items before AI analysis\n"
+        )
+        return selected
+
+    @staticmethod
+    def _effective_score_threshold(item: ContentItem, base_threshold: float) -> float:
+        """Raise the bar for low-priority or noisy sources before enrichment."""
+        priority = item.metadata.get("priority")
+        noise_level = item.metadata.get("noise_level")
+
+        try:
+            priority_value = int(priority)
+        except (TypeError, ValueError):
+            priority_value = 3
+
+        adjustment = 0.0
+        if priority_value <= 2:
+            adjustment += 0.8
+        elif priority_value >= 5:
+            adjustment -= 0.4
+
+        if noise_level == "high":
+            adjustment += 0.6
+        elif noise_level == "low":
+            adjustment -= 0.2
+
+        return max(1.0, min(10.0, base_threshold + adjustment))
 
     async def _expand_twitter_discussion(self, items: List[ContentItem]) -> None:
         """Second-stage: fetch reply text for important Twitter items and re-analyze.

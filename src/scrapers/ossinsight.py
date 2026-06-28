@@ -125,6 +125,13 @@ class OSSInsightScraper(BaseScraper):
                 "period": self.cfg.period,
                 "collection_names": collections,
                 "description": description,
+                "category": "AI 与科技动态",
+                "language": "en",
+                "region": "global",
+                "priority": 4,
+                "credibility": "medium",
+                "source_credibility": "medium",
+                "noise_level": "medium",
             },
         )
 

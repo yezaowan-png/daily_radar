@@ -13,6 +13,18 @@ from .utils import parse_json_response
 from ..models import ContentItem
 
 DEFAULT_THROTTLE_SEC = 0.0
+RADAR_CATEGORIES = {
+    "今日核心热点",
+    "AI 与科技动态",
+    "地缘政治与国际关系",
+    "中国政策与社会治理",
+    "财经市场",
+    "商业与产业趋势",
+    "社会新闻与民生事件",
+    "文化生活与大众情绪",
+}
+CONTENT_VALUES = {"可写公众号", "持续观察", "仅需了解", "忽略"}
+DEFAULT_CATEGORY = "今日核心热点"
 
 
 class ContentAnalyzer:
@@ -135,6 +147,13 @@ class ContentAnalyzer:
             source=f"{item.source_type.value}",
             author=item.author or "Unknown",
             url=str(item.url),
+            publish_time=item.published_at.isoformat() if item.published_at else "",
+            source_category=item.metadata.get("category", ""),
+            language=item.metadata.get("language", ""),
+            region=item.metadata.get("region", ""),
+            priority=item.metadata.get("priority", ""),
+            source_credibility=item.metadata.get("source_credibility", ""),
+            noise_level=item.metadata.get("noise_level", ""),
             content_section=content_section,
             discussion_section=discussion_section
         )
@@ -155,8 +174,44 @@ class ContentAnalyzer:
             item.ai_tags = []
             return
 
-        # Update item with analysis results
-        item.ai_score = float(result.get("score", 0))
+        # Update item with analysis results. Keep ai_* fields for the existing
+        # filtering pipeline, and store radar-specific fields in metadata.
+        importance_score = result.get("importance_score", result.get("score", 0))
+        try:
+            item.ai_score = max(1.0, min(10.0, float(importance_score)))
+        except (TypeError, ValueError):
+            item.ai_score = 0.0
+
         item.ai_reason = result.get("reason", "")
         item.ai_summary = result.get("summary", item.title)
         item.ai_tags = result.get("tags", [])
+
+        category = result.get("category") or item.metadata.get("category") or DEFAULT_CATEGORY
+        if category not in RADAR_CATEGORIES:
+            category = DEFAULT_CATEGORY
+
+        credibility = str(result.get("credibility", "medium")).lower()
+        if credibility not in {"high", "medium", "low"}:
+            credibility = "medium"
+
+        content_value = result.get("content_value", "仅需了解")
+        if content_value not in CONTENT_VALUES:
+            content_value = "仅需了解"
+
+        try:
+            hotness_score = max(1.0, min(10.0, float(result.get("hotness_score", 5))))
+        except (TypeError, ValueError):
+            hotness_score = 5.0
+
+        item.metadata.update({
+            "radar_title": result.get("title") or item.title,
+            "source": result.get("source") or item.source_type.value,
+            "publish_time": result.get("publish_time") or (item.published_at.isoformat() if item.published_at else ""),
+            "category": category,
+            "importance_score": item.ai_score,
+            "hotness_score": hotness_score,
+            "credibility": credibility,
+            "why_it_matters": result.get("why_it_matters", ""),
+            "follow_up_needed": bool(result.get("follow_up_needed", False)),
+            "content_value": content_value,
+        })

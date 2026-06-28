@@ -138,6 +138,27 @@ class RSSSourceConfig(BaseModel):
     url: HttpUrl
     enabled: bool = True
     category: Optional[str] = None
+    language: Optional[str] = None
+    region: Optional[str] = None
+    priority: int = Field(default=3, ge=1, le=5)
+    credibility: str = "medium"
+    noise_level: str = "medium"
+
+    @field_validator("credibility")
+    @classmethod
+    def validate_credibility(cls, v: str) -> str:
+        allowed = {"high", "medium", "low"}
+        if v not in allowed:
+            raise ValueError(f"credibility must be one of {allowed}, got '{v}'")
+        return v
+
+    @field_validator("noise_level")
+    @classmethod
+    def validate_noise_level(cls, v: str) -> str:
+        allowed = {"high", "medium", "low"}
+        if v not in allowed:
+            raise ValueError(f"noise_level must be one of {allowed}, got '{v}'")
+        return v
 
 
 class RedditSubredditConfig(BaseModel):
@@ -366,6 +387,7 @@ class CategoryGroupConfig(BaseModel):
 
     name: Optional[str] = None
     limit: int = Field(gt=0)
+    min_items: int = Field(default=0, ge=0)
     categories: List[str] = Field(min_length=1)
 
 
@@ -374,6 +396,7 @@ class FilteringConfig(BaseModel):
 
     ai_score_threshold: float = 7.0
     time_window_hours: int = 24
+    max_candidates: Optional[int] = Field(default=None, gt=0)
     max_items: Optional[int] = Field(default=None, gt=0)
     category_groups: Dict[str, CategoryGroupConfig] = Field(default_factory=dict)
     default_group: str = "other"

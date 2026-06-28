@@ -60,6 +60,17 @@ LABELS = {
     },
 }
 
+RADAR_CATEGORIES = [
+    "今日核心热点",
+    "AI 与科技动态",
+    "地缘政治与国际关系",
+    "中国政策与社会治理",
+    "财经市场",
+    "商业与产业趋势",
+    "社会新闻与民生事件",
+    "文化生活与大众情绪",
+]
+
 
 class DailySummarizer:
     """Generates daily Markdown summaries from pre-analyzed content items."""
@@ -92,26 +103,182 @@ class DailySummarizer:
         if not items:
             return self._generate_empty_summary(date, total_fetched, labels)
 
-        header = (
-            f"# {labels['header']} - {date}\n\n"
-            f"> {labels['selected_items'].format(total=total_fetched, selected=len(items))}\n\n"
-            "---\n\n"
+        if language != "zh":
+            parts = [self._format_item(item, labels, language, i + 1) for i, item in enumerate(items)]
+            return (
+                f"# {labels['header']} - {date}\n\n"
+                f"> {labels['selected_items'].format(total=total_fetched, selected=len(items))}\n\n"
+                "---\n\n"
+                + "".join(parts)
+            )
+
+        return self._generate_personal_radar_summary(items, date, total_fetched)
+
+    def _generate_personal_radar_summary(
+        self,
+        items: List[ContentItem],
+        date: str,
+        total_fetched: int,
+    ) -> str:
+        """Generate the Chinese personal daily information radar."""
+        ranked = sorted(
+            items,
+            key=lambda item: (
+                float(item.metadata.get("importance_score") or item.ai_score or 0),
+                float(item.metadata.get("hotness_score") or 0),
+            ),
+            reverse=True,
         )
 
-        # TOC
-        toc_entries = []
-        for i, item in enumerate(items):
-            _t = item.metadata.get(f"title_{language}") or item.title
-            t = str(_t).replace("[", "(").replace("]", ")")
-            if language == "zh":
-                t = _pangu(t)
-            score = item.ai_score or "?"
-            toc_entries.append(f"{i + 1}. [{t}](#item-{i + 1}) \u2b50\ufe0f {score}/10")
-        toc = "\n".join(toc_entries) + "\n\n---\n\n"
+        lines = [
+            f"# 个人每日信息雷达 - {date}",
+            "",
+            f"> 从 {total_fetched} 条内容中筛选出 {len(items)} 条重点信息。",
+            "",
+            "## 1. 今日必看（最多 30 条）",
+            "",
+        ]
 
-        parts = [self._format_item(item, labels, language, i + 1) for i, item in enumerate(items)]
+        for index, item in enumerate(ranked[:30], start=1):
+            lines.extend(self._format_radar_item(item, index, compact=False))
 
-        return header + toc + "".join(parts)
+        lines.extend(["", "## 2. 分类简报", ""])
+        for category in RADAR_CATEGORIES:
+            category_items = [item for item in ranked if self._radar_category(item) == category]
+            lines.append(f"### {category}")
+            if not category_items:
+                lines.extend(["", "- 今日暂无高价值条目。", ""])
+                continue
+            for item in category_items:
+                title = self._radar_title(item)
+                score = self._score_text(item)
+                lines.append(f"- [{title}]({item.url}) · {score} · {self._content_value(item)}")
+            lines.append("")
+
+        follow_items = [
+            item for item in ranked
+            if item.metadata.get("follow_up_needed") or self._content_value(item) == "持续观察"
+        ]
+        lines.extend(["## 3. 值得持续跟踪的事件", ""])
+        if follow_items:
+            for item in follow_items:
+                lines.append(f"- [{self._radar_title(item)}]({item.url}): {self._why_it_matters(item)}")
+        else:
+            lines.append("- 今日暂无必须持续跟踪的事件。")
+        lines.append("")
+
+        writing_items = [item for item in ranked if self._content_value(item) == "可写公众号"]
+        lines.extend(["## 4. 可转化为公众号选题", ""])
+        if writing_items:
+            for item in writing_items:
+                lines.append(f"- [{self._radar_title(item)}]({item.url}): {self._summary(item)}")
+        else:
+            lines.append("- 今日暂无特别适合展开成公众号文章的选题。")
+        lines.append("")
+
+        tomorrow_items = follow_items[:5] or ranked[:5]
+        lines.extend(["## 5. 明天继续观察什么", ""])
+        for item in tomorrow_items:
+            lines.append(f"- {self._radar_title(item)}")
+
+        return "\n".join(lines).rstrip() + "\n"
+
+    def _format_radar_item(self, item: ContentItem, index: int, compact: bool = False) -> list[str]:
+        tags = item.ai_tags or []
+        tag_text = ", ".join(tags) if tags else ""
+        fields = [
+            f"### {index}. [{self._radar_title(item)}]({item.url})",
+            "",
+            f"- title: {self._radar_title(item)}",
+            f"- source: {self._source_label(item)}",
+            f"- url: {item.url}",
+            f"- publish_time: {self._publish_time(item)}",
+            f"- category: {self._radar_category(item)}",
+            f"- tags: {tag_text}",
+            f"- importance_score: {self._importance_score(item)}",
+            f"- hotness_score: {self._hotness_score(item)}",
+            f"- credibility: {item.metadata.get('credibility', 'medium')}",
+            f"- summary: {self._summary(item)}",
+            f"- why_it_matters: {self._why_it_matters(item)}",
+            f"- follow_up_needed: {self._follow_up_text(item)}",
+            f"- content_value: {self._content_value(item)}",
+        ]
+        fields.extend(self._related_item_lines(item))
+        fields.append("")
+        return fields
+
+    def _radar_title(self, item: ContentItem) -> str:
+        title = item.metadata.get("radar_title") or item.metadata.get("title_zh") or item.title
+        return _pangu(str(title).replace("[", "(").replace("]", ")"))
+
+    def _radar_category(self, item: ContentItem) -> str:
+        category = item.metadata.get("category")
+        return category if category in RADAR_CATEGORIES else "今日核心热点"
+
+    def _importance_score(self, item: ContentItem) -> str:
+        return str(item.metadata.get("importance_score") or item.ai_score or "")
+
+    def _hotness_score(self, item: ContentItem) -> str:
+        return str(item.metadata.get("hotness_score") or "")
+
+    def _score_text(self, item: ContentItem) -> str:
+        return f"重要性 {self._importance_score(item)}/10，热度 {self._hotness_score(item)}/10"
+
+    def _source_label(self, item: ContentItem) -> str:
+        meta = item.metadata
+        if meta.get("source"):
+            return str(meta["source"])
+        if meta.get("feed_name"):
+            return str(meta["feed_name"])
+        if meta.get("subreddit"):
+            return f"reddit/r/{meta['subreddit']}"
+        return item.source_type.value
+
+    def _publish_time(self, item: ContentItem) -> str:
+        if item.metadata.get("publish_time"):
+            return str(item.metadata["publish_time"])
+        return item.published_at.isoformat() if item.published_at else ""
+
+    def _summary(self, item: ContentItem) -> str:
+        summary = (
+            item.metadata.get("detailed_summary_zh")
+            or item.metadata.get("detailed_summary")
+            or item.ai_summary
+            or ""
+        )
+        return _pangu(str(summary))
+
+    def _why_it_matters(self, item: ContentItem) -> str:
+        why = item.metadata.get("why_it_matters") or item.metadata.get("why_it_matters_zh") or item.ai_reason or ""
+        return _pangu(str(why))
+
+    def _follow_up_text(self, item: ContentItem) -> str:
+        return "true" if item.metadata.get("follow_up_needed") else "false"
+
+    def _content_value(self, item: ContentItem) -> str:
+        return str(item.metadata.get("content_value") or "仅需了解")
+
+    def _related_item_lines(self, item: ContentItem) -> list[str]:
+        related = item.metadata.get("related_items")
+        if not isinstance(related, list) or not related:
+            return []
+
+        lines = ["- related_items:"]
+        for related_item in related[:5]:
+            if not isinstance(related_item, dict):
+                continue
+            title = _pangu(str(related_item.get("title") or "相关报道"))
+            url = str(related_item.get("url") or "")
+            source = str(related_item.get("source") or "unknown")
+            summary = _pangu(str(related_item.get("summary") or ""))
+            if url:
+                line = f"  - [{title}]({url}) · {source}"
+            else:
+                line = f"  - {title} · {source}"
+            if summary:
+                line += f" · {summary}"
+            lines.append(line)
+        return lines
 
     def generate_webhook_overview(
         self,

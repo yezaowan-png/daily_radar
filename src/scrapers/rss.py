@@ -106,6 +106,11 @@ class RSSScraper(BaseScraper):
                     metadata={
                         "feed_name": source.name,
                         "category": source.category,
+                        "language": source.language,
+                        "region": source.region,
+                        "priority": source.priority,
+                        "source_credibility": source.credibility,
+                        "noise_level": source.noise_level,
                         "tags": [tag.term for tag in entry.get("tags", [])],
                     },
                 )

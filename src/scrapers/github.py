@@ -162,11 +162,18 @@ class GitHubScraper(BaseScraper):
             content=content,
             author=username,
             published_at=created_at,
-            metadata={
-                "event_type": event_type,
-                "repo": repo_name,
-            }
-        )
+                    metadata={
+                        "event_type": event_type,
+                        "repo": repo_name,
+                        "category": "AI 与科技动态",
+                        "language": "en",
+                        "region": "global",
+                        "priority": 4,
+                        "credibility": "high",
+                        "source_credibility": "high",
+                        "noise_level": "low",
+                    }
+                )
 
     async def _fetch_repo_releases(
         self,
@@ -212,6 +219,13 @@ class GitHubScraper(BaseScraper):
                         "repo": f"{owner}/{repo}",
                         "tag": release["tag_name"],
                         "prerelease": release.get("prerelease", False),
+                        "category": "AI 与科技动态",
+                        "language": "en",
+                        "region": "global",
+                        "priority": 4,
+                        "credibility": "high",
+                        "source_credibility": "high",
+                        "noise_level": "low",
                     }
                 )
                 items.append(item)
