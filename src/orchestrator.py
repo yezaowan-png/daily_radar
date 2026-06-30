@@ -751,10 +751,14 @@ class HorizonOrchestrator:
                 priority = int(item.metadata.get("priority") or 3)
             except (TypeError, ValueError):
                 priority = 3
+            if self._is_academic_ai_item(item):
+                priority = max(1, priority - 3)
             noise_rank = {"low": 2, "medium": 1, "high": 0}.get(
                 item.metadata.get("noise_level"),
                 1,
             )
+            if self._is_academic_ai_item(item):
+                noise_rank = 0
             timestamp = item.published_at.timestamp() if item.published_at else 0
             return priority, noise_rank, timestamp
 
@@ -828,7 +832,68 @@ class HorizonOrchestrator:
         elif noise_level == "low":
             adjustment -= 0.2
 
+        if HorizonOrchestrator._is_academic_ai_item(item):
+            adjustment += 1.8
+
         return max(1.0, min(10.0, base_threshold + adjustment))
+
+    @staticmethod
+    def _is_academic_ai_item(item: ContentItem) -> bool:
+        """Detect AI items that are primarily academic papers or research feeds."""
+        if item.metadata.get("category") != "AI 与科技动态":
+            return False
+
+        feed_name = str(item.metadata.get("feed_name") or "").lower()
+        title = item.title.lower()
+        content = (item.content or "").lower()
+        haystack = " ".join([feed_name, title, content[:500]])
+
+        academic_markers = (
+            "arxiv",
+            "paper",
+            "papers",
+            "论文",
+            "research paper",
+            "benchmark",
+            "dataset",
+            "preprint",
+            "conference",
+            "neurips",
+            "icml",
+            "iclr",
+            "acl ",
+            "emnlp",
+        )
+        industry_markers = (
+            "launch",
+            "released",
+            "release",
+            "product",
+            "enterprise",
+            "customer",
+            "pricing",
+            "api",
+            "sdk",
+            "agent",
+            "mcp",
+            "workflow",
+            "cursor",
+            "claude code",
+            "openai",
+            "anthropic",
+            "microsoft",
+            "google",
+            "meta",
+            "nvidia",
+            "perplexity",
+            "ollama",
+            "langchain",
+            "llamaindex",
+        )
+
+        return any(marker in haystack for marker in academic_markers) and not any(
+            marker in haystack for marker in industry_markers
+        )
 
     async def _expand_twitter_discussion(self, items: List[ContentItem]) -> None:
         """Second-stage: fetch reply text for important Twitter items and re-analyze.

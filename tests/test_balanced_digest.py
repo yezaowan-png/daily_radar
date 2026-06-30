@@ -183,6 +183,57 @@ def test_candidate_limit_reserves_source_category_groups() -> None:
     assert sum(item.metadata["category"] == "AI 与科技动态" for item in result) == 2
 
 
+def test_academic_ai_items_need_higher_score_threshold() -> None:
+    academic = make_item("paper", 7.0, "AI 与科技动态")
+    academic.title = "A new benchmark paper for reasoning models"
+    academic.metadata.update({
+        "feed_name": "arXiv cs.AI",
+        "priority": 1,
+        "noise_level": "high",
+    })
+    product = make_item("product", 7.0, "AI 与科技动态")
+    product.title = "OpenAI releases new enterprise agent SDK"
+    product.metadata.update({
+        "feed_name": "OpenAI News",
+        "priority": 5,
+        "noise_level": "low",
+    })
+
+    assert HorizonOrchestrator._is_academic_ai_item(academic) is True
+    assert HorizonOrchestrator._is_academic_ai_item(product) is False
+    assert HorizonOrchestrator._effective_score_threshold(academic, 6.2) > 8.0
+    assert HorizonOrchestrator._effective_score_threshold(product, 6.2) < 6.2
+
+
+def test_candidate_limit_deprioritizes_academic_ai_papers() -> None:
+    filtering = FilteringConfig(max_candidates=3)
+    orchestrator = make_orchestrator(filtering)
+    items = [
+        make_item("paper-newest", 0, "AI 与科技动态"),
+        make_item("paper-older", 0, "AI 与科技动态"),
+        make_item("product", 0, "AI 与科技动态"),
+        make_item("business", 0, "商业与产业趋势"),
+    ]
+    items[0].title = "A benchmark paper for language model planning"
+    items[1].title = "An arXiv paper on transformer variants"
+    items[2].title = "Cursor releases agent workflow for enterprise teams"
+    items[3].title = "Company announces new product"
+    for index, item in enumerate(items):
+        item.metadata["priority"] = 5
+        item.metadata["noise_level"] = "low"
+        item.published_at = datetime.fromtimestamp(1000 + index, timezone.utc)
+    items[0].metadata["feed_name"] = "arXiv cs.AI"
+    items[1].metadata["feed_name"] = "arXiv cs.AI"
+    items[2].metadata["feed_name"] = "Cursor Blog"
+
+    result = orchestrator.apply_candidate_limit(items)
+    result_ids = [item.id for item in result]
+
+    assert "product" in result_ids
+    assert "business" in result_ids
+    assert sum(item_id.startswith("paper") for item_id in result_ids) == 1
+
+
 def test_promote_core_hotspots_fills_core_minimum() -> None:
     filtering = FilteringConfig(
         category_groups={

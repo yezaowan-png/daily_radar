@@ -93,7 +93,7 @@
       "min_score": 100
     },
     "rss": [
-      {"name": "arXiv cs.AI", "url": "https://arxiv.org/rss/cs.AI", "enabled": true, "category": "AI 与科技动态", "language": "en", "region": "global", "priority": 5, "credibility": "high", "noise_level": "low"},
+      {"name": "arXiv cs.AI", "url": "https://arxiv.org/rss/cs.AI", "enabled": true, "category": "AI 与科技动态", "language": "en", "region": "global", "priority": 1, "credibility": "high", "noise_level": "high"},
       {"name": "OpenAI News", "url": "https://openai.com/news/rss.xml", "enabled": true, "category": "AI 与科技动态", "language": "en", "region": "global", "priority": 5, "credibility": "high", "noise_level": "low"},
       {"name": "Hugging Face Blog", "url": "https://huggingface.co/blog/feed.xml", "enabled": true, "category": "AI 与科技动态", "language": "en", "region": "global", "priority": 4, "credibility": "high", "noise_level": "low"},
       {"name": "GitHub Trending RSS", "url": "https://mshibanami.github.io/GitHubTrendingRSS/daily/all.xml", "enabled": true, "category": "AI 与科技动态", "language": "en", "region": "global", "priority": 3, "credibility": "medium", "noise_level": "medium"},

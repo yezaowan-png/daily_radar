@@ -303,6 +303,7 @@ cp data/config.example.json data/config.json  # 自定义信息源
 - GitHub Release：OpenAI Agents SDK、OpenAI Cookbook、Playwright MCP、MCP Python SDK、Claude Code、MCP Servers、LangChain、LlamaIndex、Ollama、Continue。
 - OSS Insight：通过 `mcp`、`claude`、`skill`、`agents`、`cursor`、`coding agent`、`rag`、`llamaindex`、`langchain`、`ollama` 等关键词捕捉新工具仓库。
 - RSS / Google News fallback：Vercel AI SDK、Model Context Protocol、Claude Code、AI Agent Tooling、Product Hunt AI Tools、Hacker News AI Tools。
+- AI 栏目默认偏向企业界、产品发布、应用落地、开发者工具和产业影响。普通论文、arXiv 增量研究和 benchmark-only 内容会被降低候选优先级并提高入选门槛；只有重大突破、顶级实验室发布且具有明确产品/行业影响的研究才应进入日报。
 
 **均衡日报（可选）**
 
