@@ -88,6 +88,16 @@
 - **🧙 从兴趣开始配置** — 通过交互式向导根据你的兴趣生成个性化信息源配置
 - **⚙️ 调校你的新闻雷达** — 在单个 JSON 配置中定制信息源、阈值、模型、语言和分发方式
 
+## 个人部署：投资研究报告同步
+
+本仓库的每日 GitHub Pages 链路额外支持同步本机金融日报项目输出：
+
+```bash
+/Users/caleb/miniforge3/envs/claude_prj/bin/python scripts/import_finance_report.py
+```
+
+脚本默认查找 `/Users/caleb/projects/claude_prj/claude_agent/finance_news/output` 下昨天日期的 `*_invest_research_report.md`，渲染到 `docs/finance/YYYY-MM-DD-invest-research-report.html`，并更新 `docs/finance/index.html`。如果昨天没有生成报告，脚本会跳过并返回成功，避免阻断每日信息雷达发布。
+
 ## 工作原理
 
 ```mermaid

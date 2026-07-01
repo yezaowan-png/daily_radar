@@ -28,6 +28,10 @@ title: Home
   {% endfor %}
 </ul>
 
+## 投资研究报告
+
+- [查看投资研究报告归档](finance/) — 每天自动导入本地 `finance_news/output` 中前一晚生成的 `invest_research_report.md`，渲染为适合手机阅读的 HTML。
+
 </div>
 
 <div id="lang-en" class="lang-section" markdown="1">
@@ -52,5 +56,9 @@ Welcome to [Horizon](https://github.com/thysrael/Horizon), an AI-driven informat
     <li><em>No posts yet</em></li>
   {% endfor %}
 </ul>
+
+## Investment Research Reports
+
+- [Open the finance report archive](finance/) — imports the previous evening's local `invest_research_report.md` and renders it as mobile-friendly HTML.
 
 </div>
