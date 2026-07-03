@@ -1,0 +1,356 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>📊 深度投研日报</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #18212f;
+      --muted: #667085;
+      --line: #d9e0ea;
+      --paper: #fffdf8;
+      --wash: #f3f6fb;
+      --accent: #a44718;
+      --accent-soft: #fff1df;
+    }
+    body {
+      margin: 0;
+      background:
+        radial-gradient(circle at top left, rgba(255, 189, 89, .22), transparent 30rem),
+        linear-gradient(135deg, #f8fafc 0%, #fff7ed 100%);
+      color: var(--ink);
+      font-family: "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", Georgia, serif;
+      line-height: 1.78;
+    }
+    .shell {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 28px 18px 56px;
+    }
+    .nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 18px;
+      font-family: "Avenir Next", "Helvetica Neue", sans-serif;
+      font-size: 14px;
+    }
+    .nav a {
+      color: var(--accent);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(164, 71, 24, .25);
+    }
+    article {
+      background: rgba(255, 253, 248, .9);
+      border: 1px solid var(--line);
+      box-shadow: 0 24px 70px rgba(24, 33, 47, .08);
+      border-radius: 24px;
+      padding: clamp(24px, 4vw, 52px);
+    }
+    .meta {
+      color: var(--muted);
+      font-family: "Avenir Next", "Helvetica Neue", sans-serif;
+      font-size: 14px;
+      margin-bottom: 24px;
+    }
+    h1, h2, h3 {
+      line-height: 1.25;
+      letter-spacing: -.02em;
+    }
+    h1 {
+      font-size: clamp(30px, 6vw, 52px);
+      margin: 0 0 16px;
+    }
+    h2 {
+      border-top: 1px solid var(--line);
+      margin-top: 42px;
+      padding-top: 28px;
+    }
+    a {
+      color: var(--accent);
+    }
+    blockquote {
+      border-left: 4px solid var(--accent);
+      background: var(--accent-soft);
+      margin: 24px 0;
+      padding: 12px 18px;
+      border-radius: 0 14px 14px 0;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      display: block;
+      overflow-x: auto;
+      margin: 24px 0;
+      font-family: "Avenir Next", "Helvetica Neue", sans-serif;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 11px;
+      vertical-align: top;
+    }
+    th {
+      background: var(--wash);
+      text-align: left;
+    }
+    code, pre {
+      font-family: "SFMono-Regular", Consolas, monospace;
+    }
+    pre {
+      overflow-x: auto;
+      background: #101828;
+      color: #f8fafc;
+      padding: 16px;
+      border-radius: 14px;
+    }
+    img {
+      max-width: 100%;
+    }
+    @media (max-width: 640px) {
+      .shell {
+        padding: 14px 10px 32px;
+      }
+      article {
+        border-radius: 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <nav class="nav">
+      <a href="../">返回每日信息雷达</a>
+      <a href="./">投资研究报告归档</a>
+    </nav>
+    <article>
+      <h1>📊 深度投研日报</h1>
+      <div class="meta">报告日期：2026-07-02 · 来源文件：/Users/caleb/projects/claude_prj/claude_agent/finance_news/output/2026-W27/2026-07-02_22-55-41_invest_research_report.md · 渲染时间：2026-07-03 08:02:10</div>
+      <p><strong>生成日期：</strong> 2026-07-02
+<strong>数据来源：</strong> 红宝书 / 盘中宝 / 风口研报 / 机构调研 / 电报解读 / 研选</p>
+<hr>
+<h2 id="_1">🔥 主线题材</h2>
+<h3 id="_2">题材一：功率半导体涨价潮（第二轮正式启动）</h3>
+<p><strong>核心逻辑：</strong> 全球近20家芯片企业于7月1日同步启动年内第二轮涨价，AI算力需求挤占8英寸晶圆产能+原材料涨价+库存低位形成"成本推动+需求拉动"双重涨价闭环，本轮景气周期预计持续6-12个月。</p>
+<p><strong>产业链全景：</strong>
+- <strong>上游材料/代工：</strong> 硅片（立昂微、沪硅产业）、8英寸晶圆代工（华虹半导体）→ 产能持续收紧，代工价上调5%-20%
+- <strong>中游芯片设计/制造（IDM）：</strong> IGBT/MOSFET/SiC器件 → <strong>涨价核心受益环节</strong>，直接增厚利润弹性
+- <strong>下游应用：</strong> AI服务器电源（英伟达HVDC 800V）、新能源汽车（车规IGBT）、光伏逆变器 → 需求呈数量级增长</p>
+<p><strong>机构视角（多篇文章交叉验证）：</strong>
+- <strong>扬杰科技（7月1日执行第二轮涨价10%-15%）</strong>，机构调研确认SiC在手订单饱满、产能利用率高位运行，面向AI数据中心供应SiC/MOSFET/小信号等多系列产品稳定批量供货，40A 1500V高压PTC芯片通过车规验证。
+- <strong>捷捷微电</strong>是国内涨价执行力度最强的标的：MOSFET自2月起提价10%-20%，IGBT自5月起提价10%-20%，双品类同步落地。
+- <strong>立昂微电话会</strong>明确8英寸重掺杂外延片订单旺盛，12英寸28nm逻辑芯片用硅片已批量供货，硅片供需紧缺格局完全确立。
+- <strong>斯达半导、士兰微</strong>同步发布7月1日起涨价函，IGBT/SiC MOSFET涨价15%起。</p>
+<p><strong>策略建议：</strong></p>
+<table>
+<thead>
+<tr>
+<th>策略方向</th>
+<th>具体标的</th>
+<th>触发条件</th>
+<th>止损位</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>中线持有（涨价周期延续）</td>
+<td>扬杰科技 300373</td>
+<td>已持可继续持有；新建仓等待回调至5日线附近</td>
+<td>跌破20日均线（约-8%）</td>
+</tr>
+<tr>
+<td>短线弹性博弈</td>
+<td>捷捷微电 300623</td>
+<td>MOSFET+IGBT双品种提价落地，Q2业绩兑现窗口</td>
+<td>跌破10日均线（约-5%）</td>
+</tr>
+<tr>
+<td>上游材料配套</td>
+<td>立昂微 605358</td>
+<td>硅片涨价逻辑确认，重掺外延片供需紧缺</td>
+<td>跌破年线止损</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h3 id="_3">题材二：存储扩产超级周期（设备+材料链）</h3>
+<p><strong>核心逻辑：</strong> 全球存储三巨头（三星、SK海力士、美光）进入以AI需求驱动的历史性扩产周期，资本开支以万亿为单位扩张，半导体设备及材料作为"卖铲人"最确定性受益，摩根大通上调存储TAM至1.68万亿美元进一步强化长期叙事。</p>
+<p><strong>产业链全景：</strong>
+- <strong>上游设备：</strong> 刻蚀（中微公司）、薄膜沉积（北方华创、拓荆科技）、CMP（华海清科）、清洗（盛美上海）→ <strong>扩产直接拉动订单能见度</strong>
+- <strong>上游材料：</strong> 硅片（立昂微、沪硅产业）、前驱体（雅克科技）、电子特气（华特气体、广钢气体）→ 耗材属性强，景气持续性好
+- <strong>中游制造：</strong> 长鑫科技（DRAM，科创板IPO过会拟募295亿）→ 国产存储扩产核心主体
+- <strong>下游封测：</strong> 长电科技、华天科技 → 先进封装+HBM配套需求</p>
+<p><strong>机构视角：</strong>
+- <strong>北方华创</strong>7月1日创新高（968元），主力净流入11.9亿；<strong>中微公司</strong>同步创新高（500元），主力净流入11.5亿——机构资金用真金白银投票。
+- <strong>北京君正调研纪要</strong>：DRAM涨价持续，Q2国内客户继续涨价、海外客户陆续调价；Q3价格继续上调，Q4供应依然紧张，存在继续涨价可能——存储涨价周期持续性强于预期。
+- <strong>SK海力士HBM扩产</strong>拉动前驱体需求，<strong>雅克科技</strong>是国内唯一通过SK海力士认证的前驱体供应商（注：公司澄清无六氟化钨业务，不影响基本面）。
+- <strong>华海清科</strong>6月29日大涨分析显示上半年新签订单47亿同比+121%，在手订单超90亿，设备订单兑现确定性极高。</p>
+<p><strong>策略建议：</strong></p>
+<table>
+<thead>
+<tr>
+<th>策略方向</th>
+<th>具体标的</th>
+<th>触发条件</th>
+<th>止损位</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>核心配置</td>
+<td>北方华创 002371</td>
+<td>设备龙头，机构重仓，回调至20日均线附近可加仓</td>
+<td>跌破860元（约-10%）</td>
+</tr>
+<tr>
+<td>弹性标的</td>
+<td>华海清科 688120</td>
+<td>CMP设备市占率76%，订单高增验证业绩</td>
+<td>跌破20日均线</td>
+</tr>
+<tr>
+<td>存储芯片设计（涨价弹性）</td>
+<td>北京君正 300223</td>
+<td>DRAM+SRAM+NOR涨价周期延续，毛利率逐季提升</td>
+<td>跌破10日均线</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h3 id="800v-hvdc">题材三：液冷散热（英伟达全液冷方案+800V HVDC）</h3>
+<p><strong>核心逻辑：</strong> 英伟达Rubin平台实现100%全液冷，液冷从"可选项"升级为"必选项"；800V HVDC高压直流供电Q3启动小批量出货，散热+供电双重技术革命打开千亿级市场空间。</p>
+<p><strong>产业链全景：</strong>
+- <strong>液冷系统：</strong> CDU/冷板/管路 → 英维克、高澜股份、银轮股份
+- <strong>液冷组件：</strong> 水泵/快接头/冷却液 → 大元泵业、巨化股份
+- <strong>液冷材料：</strong> 微通道液冷铜材 → 博威合金（Rubin验证成功，等待放量）
+- <strong>HVDC电源：</strong> 800V高压直流方案 → 中恒电气、麦格米特
+- <strong>服务器电源电感：</strong> 芯片电感/TLVR电感 → 铂科新材（模块式电感占比超50%，ASIC需求加速放量）</p>
+<p><strong>机构视角：</strong>
+- <strong>英维克</strong>获英伟达约17亿订单、Google约20-30亿CDU大单，液冷业务2026年Q1-Q4连续环比增长。
+- <strong>博威合金调研纪要</strong>：Rubin微通道液冷材料已验证成功，等待放量；液冷板铜材由下游深加工，液冷电力铜材用于高功率服务器供配电系统。
+- <strong>铂科新材调研纪要</strong>：芯片电感受益ASIC需求加速放量，模块式电感营收占比预计超50%，TLVR电感出货量年内大幅增加。
+- <strong>中恒电气</strong>国内HVDC市占率31%居首，800V HVDC Q3启动小批量出货，直接受益。</p>
+<p><strong>策略建议：</strong></p>
+<table>
+<thead>
+<tr>
+<th>策略方向</th>
+<th>具体标的</th>
+<th>触发条件</th>
+<th>止损位</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>核心配置</td>
+<td>英维克 002837</td>
+<td>液冷全链条龙头，已持可继续持有；新建仓关注回调后低吸</td>
+<td>跌破30日均线</td>
+</tr>
+<tr>
+<td>HVDC方向</td>
+<td>中恒电气 002364</td>
+<td>800V HVDC Q3出货启动催化</td>
+<td>跌破20日均线</td>
+</tr>
+<tr>
+<td>液冷材料弹性</td>
+<td>博威合金 601137</td>
+<td>Rubin验证通过，放量时点待定，适合低位潜伏</td>
+<td>跌破年线</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="_4">🌊 轮动/事件题材</h2>
+<h3 id="_5">题材一：光通信（工信部白皮书政策催化）</h3>
+<p><strong>核心逻辑：</strong> 工信部6月30日发布《高速光模块产业发展白皮书》，首次将高速光模块定位为"战略基础设施"，强制万卡智算中心标配800G/1.6T，政策催化+AI算力需求形成共振。短期板块高位回落（7月1日CPO跌约3%），政策催化刚发布，关注调整后的二次入场机会。</p>
+<p><strong>策略：</strong> 等待板块调整企稳后关注<strong>中际旭创</strong>（全球光模块龙头，1.6T批量出货）、<strong>华工科技</strong>（3.2T CPO/NPO方案+1.6T在手订单40万只）。光模块上游材料关注<strong>唯特偶</strong>（T7高端锡膏在1.6T光模块实现应用，价值量是T5的20倍）。</p>
+<table>
+<thead>
+<tr>
+<th>策略方向</th>
+<th>具体标的</th>
+<th>触发条件</th>
+<th>止损位</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>等待回调布局</td>
+<td>中际旭创 300308</td>
+<td>板块调整3-5个交易日后企稳</td>
+<td>跌破买入价-8%</td>
+</tr>
+<tr>
+<td>CPO弹性标的</td>
+<td>华工科技 000988</td>
+<td>政策催化+订单高增，关注10日线支撑</td>
+<td>跌破20日均线</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h3 id="spacex">题材二：商业航天（多事件催化+SpaceX估值锚定）</h3>
+<p><strong>核心逻辑：</strong> 蓝箭航天完成超13亿Pre-B轮融资；长征十号乙7月首飞窗口临近；SpaceX上市后给出2.2万亿美元+估值锚，中国商业航天从技术验证期进入规模化商业应用期。</p>
+<p><strong>策略：</strong> 短期事件催化密集（7月首飞窗口），适合短线博弈。关注<strong>斯瑞新材</strong>（与蓝箭航天等头部企业深度合作，配套火箭发动机关键零部件）、<strong>航天电器</strong>（星载连接器核心供应商）。波段操作为主。</p>
+<table>
+<thead>
+<tr>
+<th>策略方向</th>
+<th>具体标的</th>
+<th>触发条件</th>
+<th>止损位</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>短线博弈</td>
+<td>斯瑞新材 688102</td>
+<td>长征十号乙首飞临近+蓝箭融资催化</td>
+<td>跌破5日线止盈/止损</td>
+</tr>
+<tr>
+<td>稳健配置</td>
+<td>航天电器 002025</td>
+<td>军工订单+商业航天双驱动</td>
+<td>跌破20日均线</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="_6">🌱 萌芽题材（关注但不急于参与）</h2>
+<ul>
+<li>
+<p><strong>可控核聚变</strong>：7月2日盘中宝报道，中国聚变能源首个建设项目在成都开工建设，行业从实验室科研进入工程验证关键窗口期。国信证券预计"十五五""十六五"期间核聚变装置年投资规模约200亿元。关注<strong>安泰科技</strong>（为国内外多个重大聚变项目累计供应数万件产品）、<strong>浙富控股</strong>（液态金属主泵供应商）。该赛道处于极早期，短期无业绩支撑，但长期空间极大，适合纳入观察清单，等待产业化拐点信号。</p>
+</li>
+<li>
+<p><strong>金刚石半导体散热</strong>：英特尔CEO表态投资人工钻石晶圆公司，英伟达Rubin全线采用金刚石-铜复合散热方案，两大巨头共振。关注<strong>四方达</strong>（CVD金刚石散热片技术国内领先，海外头部GPU客户全流程测试通过）、<strong>沃尔德</strong>（12英寸钻石散热晶圆已研发成功）。产业处于从0到1阶段，等待规模量产验证信号。</p>
+</li>
+</ul>
+<hr>
+<h2 id="_7">⚠️ 风险提示</h2>
+<ol>
+<li>
+<p><strong>系统性风险——赢家通吃结构</strong>：当前市场热点高度集中在半导体、AI算力、液冷等少数赛道，资金高度集中。一旦全球AI资本开支预期出现边际下调，相关板块可能遭遇集体回调，需控制单一赛道仓位上限（建议单赛道不超过总仓位30%）。</p>
+</li>
+<li>
+<p><strong>行业风险——涨价周期可持续性</strong>：功率半导体和存储芯片的涨价周期受供需格局变化影响较大。若全球8英寸晶圆产能扩产超预期（如国内代工厂大幅扩产），或AI服务器出货量低于预期，涨价逻辑可能提前终结。需持续跟踪台积电、三星等代工厂产能规划及英伟达季度出货指引。</p>
+</li>
+<li>
+<p><strong>行业风险——短期高位获利了结压力</strong>：光通信、液冷、半导体设备等板块6月以来涨幅已较大（如光通信板块上半年40只个股翻倍），7月1日光通信板块午后跳水跌近3%已反映出获利盘兑现压力。追高风险加大，建议等待调整后低吸机会。</p>
+</li>
+</ol>
+<hr>
+<blockquote>
+<p>本报告由 AI 自动生成，仅供参考，不构成投资建议。
+生成时间：2026-07-02 22:55:41
+数据来源：共 36 篇文章，来自 6 个栏目/来源
+下期报告将在 6 小时后生成。</p>
+</blockquote>
+    </article>
+  </main>
+</body>
+</html>
