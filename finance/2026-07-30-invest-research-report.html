@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>📊 深度投研日报</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #18212f;
+      --muted: #667085;
+      --line: #d9e0ea;
+      --paper: #fffdf8;
+      --wash: #f3f6fb;
+      --accent: #a44718;
+      --accent-soft: #fff1df;
+    }
+    body {
+      margin: 0;
+      background:
+        radial-gradient(circle at top left, rgba(255, 189, 89, .22), transparent 30rem),
+        linear-gradient(135deg, #f8fafc 0%, #fff7ed 100%);
+      color: var(--ink);
+      font-family: "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", Georgia, serif;
+      line-height: 1.78;
+    }
+    .shell {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 28px 18px 56px;
+    }
+    .nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 18px;
+      font-family: "Avenir Next", "Helvetica Neue", sans-serif;
+      font-size: 14px;
+    }
+    .nav a {
+      color: var(--accent);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(164, 71, 24, .25);
+    }
+    article {
+      background: rgba(255, 253, 248, .9);
+      border: 1px solid var(--line);
+      box-shadow: 0 24px 70px rgba(24, 33, 47, .08);
+      border-radius: 24px;
+      padding: clamp(24px, 4vw, 52px);
+    }
+    .meta {
+      color: var(--muted);
+      font-family: "Avenir Next", "Helvetica Neue", sans-serif;
+      font-size: 14px;
+      margin-bottom: 24px;
+    }
+    h1, h2, h3 {
+      line-height: 1.25;
+      letter-spacing: -.02em;
+    }
+    h1 {
+      font-size: clamp(30px, 6vw, 52px);
+      margin: 0 0 16px;
+    }
+    h2 {
+      border-top: 1px solid var(--line);
+      margin-top: 42px;
+      padding-top: 28px;
+    }
+    a {
+      color: var(--accent);
+    }
+    blockquote {
+      border-left: 4px solid var(--accent);
+      background: var(--accent-soft);
+      margin: 24px 0;
+      padding: 12px 18px;
+      border-radius: 0 14px 14px 0;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      display: block;
+      overflow-x: auto;
+      margin: 24px 0;
+      font-family: "Avenir Next", "Helvetica Neue", sans-serif;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 11px;
+      vertical-align: top;
+    }
+    th {
+      background: var(--wash);
+      text-align: left;
+    }
+    code, pre {
+      font-family: "SFMono-Regular", Consolas, monospace;
+    }
+    pre {
+      overflow-x: auto;
+      background: #101828;
+      color: #f8fafc;
+      padding: 16px;
+      border-radius: 14px;
+    }
+    img {
+      max-width: 100%;
+    }
+    @media (max-width: 640px) {
+      .shell {
+        padding: 14px 10px 32px;
+      }
+      article {
+        border-radius: 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <nav class="nav">
+      <a href="../">返回每日信息雷达</a>
+      <a href="./">投资研究报告归档</a>
+    </nav>
+    <article>
+      <h1>📊 深度投研日报</h1>
+      <div class="meta">报告日期：2026-07-30 · 来源文件：/Users/caleb/projects/claude_prj/claude_agent/finance_news/output/2026-W31/2026-07-30_20-35-25_invest_research_report.md · 渲染时间：2026-07-31 08:01:32</div>
+      <p><strong>生成日期：</strong> 2026-07-30
+<strong>数据来源：</strong> 红宝书 / 盘中宝 / 风口研报 / 机构调研 / 电报解读 / 研选</p>
+<hr>
+<blockquote>
+<p><strong>信息源健康提示：</strong>
+今日共收到来自6个核心投研栏目的文章共45篇，覆盖2026年7月2日至7月30日区间。
+其中，"红宝书"栏目内容完整性高，覆盖时段长达29天（7/2-7/30），共19篇精选文摘，为本次分析提供主要脉络。
+今日（7/30）活跃栏目：盘中宝（4篇）、风口研报（7篇）、机构调研（6篇）、电报解读（6篇）、研选（1篇）。
+整体来看，数据源时间跨度大、栏目覆盖全面，但缺少近期"风口研报"中部分图表的完整数据（仅OCR文字识别），信息深度受到一定制约。请读者留意图表原始数据的可获得性，以进行更精确的判断。</p>
+</blockquote>
+<hr>
+<h2 id="_1">🔥 主线题材</h2>
+<h3 id="mlcc">题材一：MLCC 全行业涨价周期</h3>
+<p><strong>核心逻辑：</strong> 继台系厂商（国巨、达方）7月率先涨价后，韩系巨头三星电机宣布8月起MLCC全线涨价30%，日系龙头太阳诱电确认9月跟进，标志着全球MLCC行业正式进入由AI服务器需求驱动、供给刚性约束的全面涨价周期。供需缺口持续扩大（BB Ratio回升至1.04），龙头出货量创五年新高。</p>
+<p><strong>产业链全景：</strong>
+- <strong>上游-陶瓷粉体/电极材料：</strong> MLCC核心原材料，涨价周期中率先受益于量价齐升。受益标的：<strong>300285 国瓷材料</strong>（国内陶瓷粉体龙头，氧化锆全线涨价，自供率高具备成本优势）
+- <strong>中游-MLCC制造：</strong> 国产替代核心环节，高端化（高容、高频、高可靠性）是主战场。受益标的：<strong>000636 风华高科</strong>（国内龙头，3天2板，高端品占比35-40%）、<strong>300408 三环集团</strong>（电子陶瓷平台型龙头，粉体自供率高，α属性显著）
+- <strong>中游-配套材料/设备：</strong> 载带、支架等耗材与测试设备随MLCC放量。受益标的：<strong>002859 洁美科技</strong>（载带龙头）、<strong>688260 昀冢科技</strong>（MLCC支架）
+- <strong>下游-应用：</strong> AI服务器、汽车电子、消费电子。受益标的：（略，非纯正MLCC标的）</p>
+<p><strong>机构视角：</strong>
+- <strong>风口研报/电报解读（7/29-7/30）</strong>：三星电机接连拿下大额AI服务器MLCC长单，高端比拼技术、供货与产能。供给端结构变化，村田缩减低端转产高端，国内企业承接消费类外溢订单改善盈利。上游材料先于元件涨价，材料企业盈利确定性更强。
+- <strong>红宝书（7/29-7/30）</strong>：三星电机正式宣布涨价30%，太阳诱电9月跟进。全球MLCC龙头出货量创五年新高，BB Ratio回升至1.04。涨价浪潮从台系向韩日系全面扩散，行业共识高度一致。</p>
+<p><strong>策略建议：</strong></p>
+<table>
+<thead>
+<tr>
+<th>策略方向</th>
+<th>具体标的</th>
+<th>触发条件</th>
+<th>止损位</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>核心配置（机构重仓，趋势持有）</strong></td>
+<td><strong>000636 风华高科</strong></td>
+<td><strong>买入信号：</strong> 股价回踩5日/10日均线，且成交额维持50亿以上活跃度，可分批布局。<strong>加仓信号：</strong> 公司发布MLCC产品正式提价公告或超预期半年报。</td>
+<td>10日线或-8%。注意：7/29主力净流出9亿，高位分歧大，需控制仓位。</td>
+</tr>
+<tr>
+<td><strong>弹性配置（量价齐升，业绩弹性大）</strong></td>
+<td><strong>300408 三环集团</strong></td>
+<td><strong>买入信号：</strong> 108元附近缩量企稳。<strong>加仓信号：</strong> Q3 MLCC业务营收占比超预期提升。</td>
+<td>100元整数关口或-8%。</td>
+</tr>
+<tr>
+<td><strong>上游博弈（涨价周期领先指标）</strong></td>
+<td><strong>300285 国瓷材料</strong>、<strong>002859 洁美科技</strong></td>
+<td><strong>买入信号：</strong> 跟随板块龙头异动，自身放量突破近期平台。</td>
+<td>平台下沿或-5%。</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h3 id="_2">题材二：染料行业供给缺口驱动的涨价周期</h3>
+<p><strong>核心逻辑：</strong> 染料核心中间体H酸（年内涨150%至10万元/吨）、还原物（同比涨数倍至12万元/吨）价格暴涨，有效产能缺口超10%。染料行业CR3超80%的寡头格局下，龙头（浙江龙盛、闰土股份）具备极强定价权，7月已完成两轮集中提价，Q3旺季叠加全行业低库存，涨价持续性与业绩弹性兼具。</p>
+<p><strong>产业链全景：</strong>
+- <strong>上游-中间体：</strong> H酸、还原物供需缺口最大，自产中间体的厂商利润弹性最大。受益标的：<strong>600352 浙江龙盛</strong>（全球龙头，上下游一体化，自产中间体）
+- <strong>中游-染料制造：</strong> 活性染料、分散染料直接提价。受益标的：<strong>002440 闰土股份</strong>（涨停，分散染料龙头）、<strong>300798 锦鸡股份</strong>（活性染料，产能弹性大）、<strong>603980 吉华集团</strong>（H1预增1259%，业绩爆发）
+- <strong>下游-印染：</strong> 成本传导，旺季备货。受益标的：（略）</p>
+<p><strong>机构视角：</strong>
+- <strong>红宝书（7/28-7/29）</strong>：染料行业正处“中间体涨价→成品提价→利润弹性释放”经典周期启动阶段。具备中间体配套的头部企业将率先受益。申万宏源、方正证券等多家券商明确看多。
+- <strong>盘中宝/电报解读（7/30）</strong>：[文中未涉及新的核心驱动，可视为对红宝书逻辑的延续确认]。</p>
+<p><strong>策略建议：</strong></p>
+<table>
+<thead>
+<tr>
+<th>策略方向</th>
+<th>具体标的</th>
+<th>触发条件</th>
+<th>止损位</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>核心配置（机构重仓）</strong></td>
+<td><strong>600352 浙江龙盛</strong></td>
+<td><strong>买入信号：</strong> 当前处于趋势上行态势，可在5日/10日均线处分批布局。</td>
+<td>10日线或-6%。</td>
+</tr>
+<tr>
+<td><strong>弹性配置（短线人气龙头）</strong></td>
+<td><strong>002440 闰土股份</strong>、<strong>603980 吉华集团</strong></td>
+<td><strong>买入信号：</strong> 板块情绪稳定，换手板机会。<strong>回避信号：</strong> 缩量一字板无法参与，次日高开低走放量回落。</td>
+<td>前日涨停价或-8%。</td>
+</tr>
+<tr>
+<td><strong>高风险博弈（产能弹性最大）</strong></td>
+<td><strong>300798 锦鸡股份</strong></td>
+<td><strong>买入信号：</strong> 低开后快速拉升，有资金接力迹象。<strong>严禁追高！</strong></td>
+<td>-5%严格止损。</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h3 id="_3">题材三：光模块超跌后的修复窗口</h3>
+<p><strong>核心逻辑：</strong> “易中天”三巨头7/28历史性暴跌（板块蒸发超3300亿）后，中际旭创火速公告40-80亿回购并辟谣1.6T降价传闻，明确ASP远高于市场传言，订单能见度覆盖至2028年。恐慌逻辑被证伪，技术面上超跌后进入修复窗口，叠加中际旭创港股上市催化。</p>
+<p><strong>产业链全景：</strong>
+- <strong>核心-光模块：</strong> 800G/1.6T高速光模块是AI算力基础设施核心。受益标的：<strong>300308 中际旭创</strong>（全球龙头，回购夯实价值底）、<strong>300502 新易盛</strong>（H1业绩断层领先，70-80亿）。
+- <strong>配套-光器件/芯片：</strong> CPO/NPO光引擎、光芯片需求同增。受益标的：<strong>688498 源杰科技</strong>（CW光源，与CSP厂商合作）、<strong>300394 天孚通信</strong>（光器件，FAU已出货）。
+- <strong>新技术-NPO/CPO：</strong> 2027-2028年进入批量采购阶段。受益标的：<strong>300308 中际旭创</strong>（已有明确导入计划）。</p>
+<p><strong>机构视角：</strong>
+- <strong>机构调研（7/30）</strong>：中际旭创明确辟谣1.6T降价，1.6T ASP远高于市场传言；目前几乎所有客户订单覆盖2026全年，部分到2027年；重点客户已给出2028年新产品指引。NPO产品2027年下半年开始批量采购，2028年上量。
+- <strong>红宝书（7/29）</strong>：中际旭创40-80亿回购，电话会辟谣。AI算力军备竞赛远未见顶，光模块“卖铲人”角色确定性强，超跌后修复空间可观。</p>
+<p><strong>策略建议：</strong></p>
+<table>
+<thead>
+<tr>
+<th>策略方向</th>
+<th>具体标的</th>
+<th>触发条件</th>
+<th>止损位</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>左侧布局（确定性最高）</strong></td>
+<td><strong>300308 中际旭创</strong></td>
+<td><strong>买入信号：</strong> 股价在回购公告后企稳，不再创新低，可分笔低吸。<strong>加仓信号：</strong> 港股上市首日表现强劲，带动A股走强。</td>
+<td>7/28大跌低点或-10%。</td>
+</tr>
+<tr>
+<td><strong>右侧交易（业绩弹性最大）</strong></td>
+<td><strong>300502 新易盛</strong></td>
+<td><strong>买入信号：</strong> 等待股价放量重新站上5日线，确认短期底部。</td>
+<td>5日线再度失守或-7%。</td>
+</tr>
+<tr>
+<td><strong>新技术博弈（NPO/CPO）</strong></td>
+<td><strong>300394 天孚通信</strong>、<strong>688498 源杰科技</strong></td>
+<td><strong>买入信号：</strong> 中际旭创/新易盛企稳后，作为产业链联动标的进行布局。</td>
+<td>跟随龙头波动，龙头破位即止损。</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="_4">🌊 轮动/事件题材</h2>
+<h3 id="_5">题材一：人形机器人——量产元年与资本热潮共振</h3>
+<ul>
+<li><strong>核心逻辑：</strong> 特斯拉Optimus 7-8月投产5000台，宇树科技IPO注册获批（出货量全球第一），中国工信部明确2026年整机产量突破10万台。一级市场融资上半年达1041亿，超去年全年近一倍。产业从“炫技”进入“真干活”阶段。</li>
+<li><strong>策略：</strong> 产业长期趋势确定，但短期标的纯正度参差不齐。<strong>关注回调后的布局机会，不追高连板股。</strong></li>
+<li><strong>核心标的：</strong><ul>
+<li><strong>688017 绿的谐波</strong>：核心零部件（谐波减速器）龙头，单机价值量大，是产业链“卖铲人”中确定性最高的标的。宇树IPO和特斯拉量产直接拉动需求。</li>
+<li><strong>300660 柯力传感</strong>：六维力传感器稀缺标的，技术壁垒高。</li>
+<li><strong>002050 三花智控</strong> [待核实]（或<strong>300124 汇川技术</strong>）：特斯拉产业链核心供应商，价值量高。</li>
+</ul>
+</li>
+<li><strong>触发条件：</strong> 特斯拉Optimus量产视频发布、宇树科技上市交易首日大涨、国内政策细则落地。</li>
+</ul>
+<h3 id="_6">题材二：国产半导体设备——扩产逻辑下的“必选项”</h3>
+<ul>
+<li><strong>核心逻辑：</strong> 全球半导体资本开支进入扩张周期（韩国800万亿韩元存储扩产），长鑫科技IPO募资579亿（超220亿用于设备采购），华为昇腾950等国产算力芯片放量倒逼上游晶圆厂扩产。国产设备成熟制程覆盖率破80%，正从“替代选项”变为“必选项”。</li>
+<li><strong>策略：</strong> 板块处于业绩与订单双重验证期，适合趋势性持有。</li>
+<li><strong>核心标的：</strong><ul>
+<li><strong>002371 北方华创</strong>：平台型设备龙头，覆盖80%以上核心工序，扩产最直接受益者。</li>
+<li><strong>688012 中微公司</strong>：刻蚀设备龙头，已进入台积电、三星产线，高价值量环节。</li>
+</ul>
+</li>
+<li><strong>触发条件：</strong> 长鑫/中芯国际公布超预期资本开支计划，国内某存储厂启动大规模招标。</li>
+</ul>
+<hr>
+<blockquote>
+<p>本报告由 AI 自动生成，仅供参考，不构成投资建议。
+生成时间：2026-07-30 20:35:25
+数据来源：共 45 篇文章，来自 6 个栏目/来源
+下期报告将在 6 小时后生成。</p>
+</blockquote>
+    </article>
+  </main>
+</body>
+</html>
