@@ -6,6 +6,7 @@ from dataclasses import dataclass, field
 from datetime import datetime, timedelta, timezone
 from typing import List, Dict, Optional
 from urllib.parse import urlparse
+from zoneinfo import ZoneInfo
 import httpx
 from rich.console import Console
 
@@ -27,6 +28,9 @@ from .ai.analyzer import ContentAnalyzer
 from .ai.summarizer import DailySummarizer
 from .ai.enricher import ContentEnricher
 from .ai.tokens import get_usage_snapshot
+
+
+REPORT_TIMEZONE = ZoneInfo("Asia/Shanghai")
 
 
 @dataclass
@@ -158,7 +162,7 @@ class HorizonOrchestrator:
             await self._enrich_important_items(important_items)
 
             # 7. Generate and save daily summaries for each configured language
-            today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+            today = datetime.now(REPORT_TIMEZONE).strftime("%Y-%m-%d")
             for lang in self.config.ai.languages:
                 summarizer = DailySummarizer()
                 summary = await summarizer.generate_summary(important_items, today, len(all_items), language=lang)
@@ -242,7 +246,7 @@ class HorizonOrchestrator:
             # Send webhook failure notification if configured
             if self.webhook_notifier:
                 await self.webhook_notifier.send_failure(
-                    date=datetime.now(timezone.utc).strftime("%Y-%m-%d"),
+                    date=datetime.now(REPORT_TIMEZONE).strftime("%Y-%m-%d"),
                     error_message=str(e),
                 )
 
